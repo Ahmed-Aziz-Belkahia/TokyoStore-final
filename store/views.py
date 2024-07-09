@@ -2513,7 +2513,9 @@ def country_get(request):
 
 
 def pageNotFoundView(request, invalid_path=None):
-    return render(request, '404.html', status=404)
+    featured_products = Product.objects.filter(featured=True).order_by("index")[:5]
+    top_products = Product.objects.annotate(order_count=Count('cartorderitem')).order_by('-order_count')[:6]
+    return render(request, 'Template/html/home/404.html', {"featured_products": featured_products, "top_products": top_products})
 
 def handler404(request, exception):
-    return render(request, '404.html', status=404)
+    return render(request, 'Template/html/home/404.html', status=404)
