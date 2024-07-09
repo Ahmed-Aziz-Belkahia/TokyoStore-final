@@ -1,4 +1,4 @@
-{% extends "partials/base.html" %}
+{% extends "partials/base-cart.html" %}
 {% load static %}
 {% block title %}
     Panier
@@ -77,47 +77,47 @@
   .shipping_option_container {
     padding: 1rem;
     width: 100%;
-}
-.shipping_option_container p {
-  font-size: .8125rem;
-  font-weight: 400;
-  line-height: 1.1;
-  margin: 0;
-  padding: 1rem 0 0;
-  text-align: left;
-  color: gray;
-}
-.divs__div.color.selected {
-  border-color: var(--MS-C);
-  border-width: 2px;
-}
-.lucide-truck, .lucide-store{
-  width: fit-content;
-}
-.shipping_text{
-  width: fit-content;
-    font-weight: 900;
-    font-size: large;
-    font-style: italic;
-    color: black;
-}
-@media screen and (max-width: 768px){
-  table tr {
-    border-bottom: 3px solid #ddd;
-    margin-bottom: 0.625em;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-    align-items: center;
   }
-  .shopping_cart_table .table tbody.table_body tr th, .shopping_cart_table .table tbody.table_body tr td{
-    padding: 0;
+  .shipping_option_container p {
+    font-size: .8125rem;
+    font-weight: 400;
+    line-height: 1.1;
+    margin: 0;
+    padding: 1rem 0 0;
+    text-align: left;
+    color: gray;
   }
-  
-}
-.purple-btn{
-  color: white !important;
-}
+  .divs__div.color.selected {
+    border-color: var(--MS-C);
+    border-width: 2px;
+  }
+  .lucide-truck, .lucide-store{
+    width: fit-content;
+  }
+  .shipping_text{
+    width: fit-content;
+      font-weight: 900;
+      font-size: large;
+      font-style: italic;
+      color: black;
+  }
+  @media screen and (max-width: 768px){
+    table tr {
+      border-bottom: 3px solid #ddd;
+      margin-bottom: 0.625em;
+      display: flex;
+      justify-content: space-around;
+      flex-direction: column;
+      align-items: center;
+    }
+    .shopping_cart_table .table tbody.table_body tr th, .shopping_cart_table .table tbody.table_body tr td{
+      padding: 0;
+    }
+    
+  }
+  .purple-btn{
+    color: white !important;
+  }
 </style>
 <div class="body_content_wrapper position-relative" id="cartList">
   <!-- Breadcrumb de la page intérieure -->
@@ -307,6 +307,7 @@
           </div>
 
           <a
+            style="background-color: lime"
             href="{% url 'store:shipping_address' %}"
             class="btn w100 mt-4 purple-btn"
             >Continue</a
@@ -315,6 +316,9 @@
       </div>
     </div>
   </section>
+
+  <!-- ========== SECONDARY CONTENTS ========== -->
+
 </div>
 
 <script>

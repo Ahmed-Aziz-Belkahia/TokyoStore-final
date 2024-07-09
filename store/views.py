@@ -468,8 +468,11 @@ def category_shop(request, meta_title):
     paginator = Paginator(filtered_products, 16)
     page_number = request.GET.get('page')
     pages_filtered_products = paginator.get_page(page_number)
-
+    latest_products = Product.objects.filter(status="published", category=category).order_by("-date")[:15]
+    recomended_products = products.filter(is_recomended=True)
     context = {
+        "recomended_products": recomended_products,
+        "latest_products": latest_products,
         "current_category": category,
         "direct_subcategories": direct_subcategories,
         "brands": brands,
@@ -484,7 +487,7 @@ def category_shop(request, meta_title):
         'selected_brands': selected_brands,
     }
     if products:
-        return render(request, "store/category_shop.html", context)
+        return render(request, "Template\html\shop\shop-4-columns-sidebar-category.html", context)
     else:
        return redirect(reverse("store:home"))
 
@@ -559,8 +562,12 @@ def brand_shop(request, meta_title):
     paginator = Paginator(filtered_products, 16)
     page_number = request.GET.get('page')
     pages_filtered_products = paginator.get_page(page_number)
+    latest_products = Product.objects.filter(status="published", brand=brand).order_by("-date")[:15]
+    recomended_products = products.filter(is_recomended=True)
 
     context = {
+        "recomended_products": recomended_products,
+        "latest_products": latest_products,
         "brand": brand,
         "direct_subcategories": direct_subcategories,
         "shop_categories": categories,
@@ -575,7 +582,7 @@ def brand_shop(request, meta_title):
         'selected_subcategories': selected_subcategories,
     }
     if products:
-        return render(request, "store/brand_shop.html", context)
+        return render(request, "Template\html\shop\shop-4-columns-sidebar-brand.html", context)
     else:
        return redirect(reverse("store:home"))
 

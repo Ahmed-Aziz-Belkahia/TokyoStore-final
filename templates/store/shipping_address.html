@@ -1,4 +1,4 @@
-{% extends "partials/base.html" %}
+{% extends "partials/base-cart.html" %}
 {% load static %}
 
 {% block title %}
@@ -271,7 +271,7 @@
                 </ul>
 
                 {% if totalcartitems %}
-                <button type="submit" class="btn purple-btn btn-block h-10">
+                <button type="submit" style="background-color:lime" class="btn purple-btn btn-block h-10">
                   Passer à la caisse
                 </button>
                 {% endif %}
