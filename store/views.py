@@ -91,10 +91,11 @@ def index(request):
     latest_products1 = latest_products[:8]
     latest_products2 = latest_products[8:16]
     latest_products3 = latest_products[16:24]
-    featured_products = Product.objects.filter(featured=True).order_by("index")
-    list_featured_products = Product.objects.filter(list_featured=True).order_by("index")
+    featured_products = Product.objects.filter(featured=True).order_by("index")[:5]
+    home_featured = Product.objects.filter(home_featured=True).order_by("index")[:5]
+    list_featured_products = Product.objects.filter(list_featured=True).order_by("index")[:5]
     deal_of_the_week_products = Product.objects.filter(deal_of_the_week=True).order_by("index")
-    list_on_sale_products = Product.objects.filter(on_sale=True).order_by("index")
+    list_on_sale_products = Product.objects.filter(on_sale=True).order_by("index")[:5]
     footer_on_sale_products = Product.objects.filter(on_sale=True).order_by("index")[:3]
     # Annotate products with order_count and get the top 20 ordered products
     top_products = Product.objects.annotate(order_count=Count('cartorderitem')).order_by('-order_count')[:20]
@@ -118,7 +119,7 @@ def index(request):
     first_home_featured_categories = Category.objects.filter(home_feature=True, upper_half=True)
     viewed_items = RecentlyViewed.objects.filter(user=request.user).order_by('-timestamp')[:20]
 
-    small_boxes = Product.objects.filter(home_small_box=True)[:2]
+    small_boxes = Product.objects.filter(home_small_box=True)
 
     top_5_rated_products = Product.objects.filter(status="published").annotate(avg_rating=Avg('reviews__rating')).order_by('-avg_rating')[:5]
     featured_blogs = Post.objects.filter(featured=True)
@@ -142,7 +143,7 @@ def index(request):
     featured_games = Product.objects.filter(featured_game=True, game=True)
     featured_games_sliders = Product.objects.filter(add_to_featured_games_slider=True)
     featured_genres = Genre.objects.filter(featured=True, active=True)
-    footer_featured = Product.objects.get(footer_feature=True)
+    footer_featured = Product.objects.filter(footer_feature=True).first()
 
     context = {
         'heros':                    heros,

@@ -43,3 +43,7 @@ def past_mini_get(instance):
         return instance[5:]
     except:
         return None
+    
+@register.filter
+def get(instance, num):
+    return instance[:num]

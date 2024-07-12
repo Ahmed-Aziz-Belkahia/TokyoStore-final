@@ -155,7 +155,7 @@ class Category(models.Model):
     tags = models.CharField(blank=True, null=True, max_length=10000)
     image = models.ImageField(upload_to="category", default="category.png", null=True, blank=True)
     alt = models.CharField(max_length=100, blank=True, null=True)
-    featured_product = models.ForeignKey("store.Product", on_delete=models.CASCADE, blank=True, null=True, related_name="f_c_product")
+    featured_product = models.ForeignKey("store.Product", on_delete=models.SET_NULL, blank=True, null=True, related_name="f_c_product")
     bestseller = models.BooleanField(default=False)
     home_feature = models.BooleanField(default=False)
     upper_half = models.BooleanField(default=False)
@@ -191,6 +191,8 @@ class SubCategory(models.Model):
     feature_within_category = models.BooleanField(default=False)
     meta_title = models.SlugField(unique=True, null=True, blank=True)
     image = models.ImageField(upload_to="sub_category", default="sub_category.png", null=True, blank=True)
+    deal_image = models.ImageField(upload_to="deal", default="deal.png", null=True, blank=True)
+
     alt = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
@@ -389,6 +391,7 @@ class Product(models.Model):
 
     #types = models.ManyToManyField(Type, blank=True, related_name='products')
 
+    home_featured = models.BooleanField(default=False)
     footer_feature = models.BooleanField(default=False)
 
     title = models.CharField(max_length=100)
@@ -398,6 +401,15 @@ class Product(models.Model):
     index = models.IntegerField(default=10, blank=True, null=True)
 
     image = models.ImageField(upload_to=user_directory_path, default="product.png")
+    small_image = models.ImageField(upload_to=user_directory_path, default="product.png")
+    home_featured_image = models.ImageField(upload_to=user_directory_path, default="product.png")
+    footer_image = models.ImageField(upload_to=user_directory_path, default="product.png")
+    footer_banner = models.ImageField(upload_to=user_directory_path, default="product.png")
+    deal_image = models.ImageField(upload_to="deal", default="deal.png", null=True, blank=True)
+    deal_of_the_week_image = models.ImageField(upload_to=user_directory_path, default="product.png")
+    category_feature = models.ImageField(upload_to=user_directory_path, default="product.png")
+    small_box_image = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
+
     alt = models.CharField(max_length=100, blank=True, null=True)
     outer_description = models.CharField(max_length=200, help_text="Comma-separated list of available features", blank=True)
     mini_description = CKEditor5Field(config_name='extends', null=True, blank=True)
@@ -405,7 +417,6 @@ class Product(models.Model):
     meta_description = models.CharField(blank=True, null=True, max_length=10000)
 
     home_small_box = models.BooleanField(default=False)
-    image_small_box = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
 
     price = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, null=True, blank=True)
     old_price = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, null=True, blank=True)
@@ -454,7 +465,6 @@ class Product(models.Model):
     hero_text = models.CharField(max_length=50, blank=True, null=True)
 
     deal_category = models.CharField(choices=DEAL_CATEGORIES, max_length=40, blank=True, null=True)
-    deal_image = models.ImageField(upload_to="deal", default="deal.png", null=True, blank=True)
     deal_alt = models.CharField(max_length=100, blank=True, null=True)
     deal_description = models.CharField(max_length=150, blank=True, null=True)
 

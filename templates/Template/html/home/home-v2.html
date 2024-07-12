@@ -645,11 +645,13 @@
                     <div class="col-xl-3 col-wd-auto d-none d-xl-block">
                         <div class="max-width-270 min-width-270 pt-xl-13 mt-xl-13">
                             <!-- Image Banner -->
-                            <aside class="mb-8">
-                                <a href="{% url "store:product-detail" meta_title=cta1.product.meta_title %}" class="d-block">
-                                    <img class="img-fluid" src="{{cta1.banner.url}}" alt="{{cta1.alt}}">
-                                </a>
-                            </aside>
+                            {% if cta1 %}
+                                <aside class="mb-8">
+                                    <a href="{% url "store:product-detail" meta_title=cta1.product.meta_title %}" class="d-block">
+                                        <img class="img-fluid" src="{{cta1.banner.url}}" alt="{{cta1.alt}}">
+                                    </a>
+                                </aside>
+                            {% endif %}
                             <!-- End Image Banner -->
                             <!-- Latest Products -->
                             <aside class="mb-4">
@@ -871,12 +873,12 @@
                                             <div class="post-item">
                                                 <div class="product-item__body pb-xl-2">
                                                     <div class="mb-3">
-                                                        <a href="{% url "blog:blog-detail" meta_title=post.meta_title %}" class="d-block text-center"><img class="img-fluid" src="{{post.image.url}}" alt="Image Description"></a>
+                                                        <a href="{% url "blog:blog-detail" meta_title=post.meta_title %}" class="d-block text-center"><img class="img-fluid" src="{{post.outer_image.url}}" alt="Image Description"></a>
                                                     </div>
                                                     <div class="mb-1"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5">{{post.category}}</a></div>
                                                     <h6 class="mb-2 post-item__title font-size-14"><a href="{% url "blog:blog-detail" meta_title=post.meta_title %}" class="font-weight-bold text-dark">{{post.title}}</a></h6>
                                                     <div class="mb-1">
-                                                        <a href="{% url "blog:blog-detail" meta_title=post.meta_title %}" class="d-block text-gray-5"><i class="ec ec-comment"></i> 3</a>
+                                                        <a href="{% url "blog:blog-detail" meta_title=post.meta_title %}" class="d-block text-gray-5"><i class="ec ec-comment"></i> {{post.comments.count}}</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -897,7 +899,7 @@
                                     <a href="../shop/shop.html" class="d-black text-gray-90">
                                         <div class="min-height-166 py-1 py-xl-2 py-wd-4 d-flex bg-gray-1 align-items-center">
                                             <div class="col-6 col-xl-7 col-wd-6 pr-0">
-                                                <img class="img-fluid" src="{{subcategory.image.url}}" alt="Image Description">
+                                                <img class="img-fluid" src="{{subcategory.deal_image.url}}" alt="Image Description">
                                             </div>
                                             <div class="col-6 col-xl-5 col-wd-6 pr-xl-4 pr-wd-3">
                                                 <div class="mb-2 pb-1 font-size-18 font-weight-light text-ls-n1 text-lh-23">
@@ -1088,7 +1090,7 @@
                                         }
                                     }]'>
                                     {% comment %} LOADING {% endcomment %}
-                                    <div class="js-slide">
+                                    {% comment %} <div class="js-slide">
                                         <div class="p-4 p-xl-0 p-wd-4 border border-xl-0 border-width-2 border-primary borders-radius-20 bg-white">
                                             <div class="row align-items-md-center">
                                                 <div class="col-md-6 col-xl-7 col-wd-6 px-0 align-self-center">
@@ -1132,7 +1134,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> {% endcomment %}
                                     {% for product in deal_of_the_week_products.all %}
                                         <div class="js-slide">
                                             <div class="p-4 p-xl-0 p-wd-4 border border-xl-0 border-width-2 border-primary borders-radius-20 bg-white">
@@ -1147,7 +1149,7 @@
                                                         <div class="mb-4 mb-md-0">
                                                             <div class="row align-items-center">
                                                                 <div class="col">
-                                                                    <a href="../shop/single-product-fullwidth.html" class="d-block text-center"><img class="img-fluid mx-auto" src="{{product.image.url}}" alt="{{product.alt}}"></a>
+                                                                    <a href="../shop/single-product-fullwidth.html" class="d-block text-center"><img class="img-fluid mx-auto" src="{{product.deal_of_the_week_image.url}}" alt="{{product.alt}}"></a>
                                                                 </div>
 
                                                                 <div class="col-auto d-none d-xl-block d-wd-none">
@@ -1433,7 +1435,7 @@
                                         <li class="nav-item flex-shrink-0 flex-md-shrink-1">
                                             <button role="tab" aria-selected="true" aria-controls="cpanel1_{{ forloop.counter }}" id="ctab1_{{ forloop.counter }}" class="Ctab text-gray-90 btn btn-outline-primary border-width-2 rounded-pill py-1 px-4 font-size-15 text-lh-19 font-size-15-md">Top 20</button>
                                         </li>
-                                        {% for subcategory in category|ret_feature_within_subcategories %}
+                                        {% for subcategory in category|ret_feature_within_subcategories|get:5 %}
                                         <li class="nav-item flex-shrink-0 flex-md-shrink-1">
                                             <button role="tab" aria-selected="false" aria-controls="cpanel{{ forloop.counter|add:2 }}_{{ forloop.parentloop.counter }}" id="ctab{{ forloop.counter|add:2 }}_{{ forloop.parentloop.counter }}" class="Ctab nav-link text-gray-8">{{ subcategory.title }}</button>
                                         </li>
@@ -1443,12 +1445,12 @@
                                 <div class="row">
                                     <div class="col-auto">
                                         <a href="../shop/shop.html" class="d-block">
-                                            <img class="img-fluid" src="{{ category.featured_product.image.url }}" alt="{{ category.featured_product.alt }}">
+                                            <img class="img-fluid" src="{{ category.featured_product.category_feature.url }}" alt="{{ category.featured_product.alt }}">
                                         </a>
                                     </div>
                                     <div class="Ctab-panel col" id="cpanel1_{{ forloop.counter }}" role="tabpanel" aria-labelledby="ctab1_{{ forloop.counter }}">
                                         <ul class="row list-unstyled products-group no-gutters">
-                                            {% for product in category|get_top_selling_from_category %}
+                                            {% for product in category|get_top_selling_from_category|get:8 %}
                                             <li class="col-6 col-md-4 col-wd-3 product-item">
                                                 <div class="product-item__outer h-100">
                                                     <div class="product-item__inner px-xl-4 p-3">
@@ -1479,10 +1481,10 @@
                                             {% endfor %}
                                         </ul>
                                     </div>
-                                    {% for subcategory in category|ret_feature_within_subcategories %}
+                                    {% for subcategory in category|ret_feature_within_subcategories|get:5 %}
                                     <div class="Ctab-panel col" id="cpanel{{ forloop.counter|add:2 }}_{{ forloop.parentloop.counter }}" role="tabpanel" aria-labelledby="ctab{{ forloop.counter|add:2 }}_{{ forloop.parentloop.counter }}" hidden>
                                         <ul class="row list-unstyled products-group no-gutters">
-                                            {% for product in subcategory|get_subcategories_products %}
+                                            {% for product in subcategory|get_subcategories_products|get:8 %}
                                             <li class="col-6 col-md-4 col-wd-3 product-item">
                                                 <div class="product-item__outer h-100">
                                                     <div class="product-item__inner px-xl-4 p-3">
@@ -1648,10 +1650,10 @@
                         <!-- Banner 2 columns -->
                         <div class="mb-8">
                             <div class="row">
-                                {% for product in small_boxes %}
+                                {% for product in small_boxes|get:2 %}
                                     <div class="col-md-6 mb-3 mb-md-0">
                                         <a href="../shop/shop.html">
-                                            <img class="img-fluid" src="{{product.image_small_box.url}}" alt="{{product.alt}}">
+                                            <img class="img-fluid" src="{{product.small_box_image.url}}" alt="{{product.alt}}">
                                         </a>
                                     </div>
                                 {% endfor %}
@@ -1805,7 +1807,21 @@
                         {% endfor %}
                         <!-- End Smartphones -->
                         <!-- Recently viewed -->
-                        <div class="position-relative">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        {% comment %} <div class="position-relative">
                             <div class="border-bottom border-color-1 mb-2">
                                 <h3 class="section-title mb-0 pb-2 font-size-22">Recently viewed</h3>
                             </div>
@@ -1874,8 +1890,58 @@
                                     </div>
                                 {% endfor %}
                             </div>
-                        </div>
+                        </div> {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         <!-- End Recently viewed -->
+                         <!-- Brand Carousel -->
+                        <div class="mb-8">
+                            <div class="py-2 border-top border-bottom">
+                                <div class="js-slick-carousel u-slick my-1"
+                                    data-slides-show="5"
+                                    data-slides-scroll="1"
+                                    data-arrows-classes="d-none d-lg-inline-block u-slick__arrow-normal u-slick__arrow-centered--y"
+                                    data-arrow-left-classes="fa fa-angle-left u-slick__arrow-classic-inner--left z-index-9"
+                                    data-arrow-right-classes="fa fa-angle-right u-slick__arrow-classic-inner--right"
+                                    data-responsive='[{
+                                        "breakpoint": 992,
+                                        "settings": {
+                                            "slidesToShow": 2
+                                        }
+                                    }, {
+                                        "breakpoint": 768,
+                                        "settings": {
+                                            "slidesToShow": 1
+                                        }
+                                    }, {
+                                        "breakpoint": 554,
+                                        "settings": {
+                                            "slidesToShow": 1
+                                        }
+                                    }]'>
+                                    {% for brand in brands %}
+                                        <div class="js-slide">
+                                            <a href="#" class="link-hover__brand">
+                                                <img class="img-fluid m-auto max-height-50" src="{{brand.image.url}}" alt="{{brand.alt}}">
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Brand Carousel -->
                     </div>
                 </div>
             </div>
@@ -1932,7 +1998,7 @@
                                 {% for product in bottom_top_products %}
                                     <li class="product-item product-item__list row no-gutters mb-6 remove-divider">
                                         <div class="col-auto">
-                                            <a href="../shop/single-product-fullwidth.html" class="d-block width-75 text-center"><img class="img-fluid" src="{{product.image.url}}" alt="Image Description"></a>
+                                            <a href="../shop/single-product-fullwidth.html" class="d-block width-75 text-center"><img class="img-fluid" src="{{product.footer_image.url}}" alt="Image Description"></a>
                                         </div>
                                         <div class="col pl-4 d-flex flex-column">
                                             <h5 class="product-item__title mb-0"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">{{product.title}}</a></h5>
@@ -1953,7 +2019,7 @@
                             {% for product in footer_on_sale_products %}
                                     <li class="product-item product-item__list row no-gutters mb-6 remove-divider">
                                         <div class="col-auto">
-                                            <a href="../shop/single-product-fullwidth.html" class="d-block width-75 text-center"><img class="img-fluid" src="{{product.image.url}}" alt="Image Description"></a>
+                                            <a href="../shop/single-product-fullwidth.html" class="d-block width-75 text-center"><img class="img-fluid" src="{{product.footer_image.url}}" alt="Image Description"></a>
                                         </div>
                                         <div class="col pl-4 d-flex flex-column">
                                             <h5 class="product-item__title mb-0"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">{{product.title}}</a></h5>
@@ -1974,7 +2040,7 @@
                             {% for product in footer_top_products %}
                                 <li class="product-item product-item__list row no-gutters mb-6 remove-divider">
                                     <div class="col-auto">
-                                        <a href="../shop/single-product-fullwidth.html" class="d-block width-75 text-center"><img class="img-fluid" src="{{product.image.url}}" alt="{{product.alt}}"></a>
+                                        <a href="../shop/single-product-fullwidth.html" class="d-block width-75 text-center"><img class="img-fluid" src="{{product.footer_image.url}}" alt="{{product.alt}}"></a>
                                     </div>
                                     <div class="col pl-4 d-flex flex-column">
                                         <h5 class="product-item__title mb-0"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">{{product.title}}</a></h5>
@@ -1994,7 +2060,7 @@
                         </ul>
                     </div>
                     <div class="col-wd-3 d-none d-wd-block">
-                        <a href="../shop/shop.html" class="d-block"><img class="img-fluid" src="{{footer_featured.image.url}}" alt="Image Description"></a>
+                        <a href="../shop/shop.html" class="d-block"><img class="img-fluid" src="{{footer_featured.footer_banner.url}}" alt="Image Description"></a>
                     </div>
                 </div>
             </div>

@@ -183,7 +183,7 @@ def default(request):
     bottom_top_products = models.Product.objects.annotate(order_count=Count('cartorderitem')).order_by('-order_count')[:3]
     footer_on_sale_products = models.Product.objects.filter(on_sale=True).order_by("index")[:3]
     top_products = models.Product.objects.annotate(order_count=Count('cartorderitem')).order_by('-order_count')[:20]
-    footer_featured = models.Product.objects.get(footer_feature=True)
+    footer_featured = models.Product.objects.filter(footer_feature=True).first()
     footer_top_products = top_products[:3]
     cart_total_amount = 0
     tax_amount_ = 0
