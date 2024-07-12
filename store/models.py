@@ -581,6 +581,13 @@ class Product(models.Model):
         return [color.strip() for color in self.colors.split(',')]
     def get_sizes_list(self):
         return [size.strip() for size in self.sizes.split(',')]
+    
+    def percentage_of_rating(self, rating):
+        total_reviews = Review.objects.filter(product=self).count()
+        if total_reviews == 0:
+            return 0
+        rating_count = Review.objects.filter(product=self, rating=rating).count()
+        return (rating_count / total_reviews) * 100
 
 class Gallery(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, related_name="product_gallery")
@@ -727,6 +734,8 @@ class CartOrderItem(models.Model):
     vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True)
     # coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True)
     coupon = models.ManyToManyField(Coupon, blank=True)
+    color = models.CharField(max_length=50, blank=True, null=True)
+    size = models.CharField(max_length=50, blank=True, null=True)
     qty = models.IntegerField(default=0)
     price = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, help_text="Total of Product price * Product Qty")

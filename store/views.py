@@ -772,11 +772,11 @@ def product_detail(request, meta_title):
     reviews = Review.objects.filter(product=product, active=True).order_by("-id")
     review_form = ReviewForm()
 
-    five_star = Review.objects.filter(product=product, active=True, rating=5).count()
-    four_star = Review.objects.filter(product=product, active=True, rating=4).count()
-    three_star = Review.objects.filter(product=product, active=True, rating=3).count()
-    two_star = Review.objects.filter(product=product, active=True, rating=2).count()
-    one_star = Review.objects.filter(product=product, active=True, rating=1).count()
+    five_star = Review.objects.filter(product=product, rating=5).count()
+    four_star = Review.objects.filter(product=product, rating=4).count()
+    three_star = Review.objects.filter(product=product, rating=3).count()
+    two_star = Review.objects.filter(product=product, rating=2).count()
+    one_star = Review.objects.filter(product=product, rating=1).count()
 
     relatedproduct = None  # Initialize relatedproduct outside the loop
     
@@ -1161,6 +1161,8 @@ def add_to_cart(request):
     cart_product[str(request.GET['id'])] = {
         'title': request.GET['title'],
         'qty': request.GET['qty'],
+        'color': request.GET['color'],
+        'size': request.GET['size'],
         'price': request.GET['price'],
         'product_meta_title': request.GET['product_meta_title'],
         'product_is_digital': request.GET['product_is_digital'],
@@ -1608,13 +1610,13 @@ def shipping_address(request):
 
             if request.user.is_authenticated:
                 order = CartOrder.objects.create(
-                    full_name=request.user.profile.full_name,
-                    email=request.user.email,
-                    mobile=request.user.profile.phone,
-                    country=request.user.profile.country,
-                    state=request.user.profile.state,
-                    town_city=request.user.profile.city,
-                    address=request.user.profile.address,
+                    full_name=full_name,
+                    email=full_name,
+                    mobile=mobile,
+                    country=country,
+                    state=state,
+                    town_city=town_city,
+                    address=address,
                     shipping_method=shipping_method,
                     payment_method=payment_method,
 
@@ -1704,6 +1706,8 @@ def shipping_address(request):
                     vendor=product.vendor,
                     invoice_no="#" + str(order.oid), 
                     product=item['title'],
+                    color=item['color'],
+                    size=item['size'],
                     image=item['image'],
                     qty=item['qty'],
                     product_obj=product,

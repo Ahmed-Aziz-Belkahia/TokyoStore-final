@@ -47,3 +47,15 @@ def past_mini_get(instance):
 @register.filter
 def get(instance, num):
     return instance[:num]
+    
+@register.filter
+def filter_ratings(instance, num):
+    return instance.filter(rating=num)
+    
+@register.filter
+def rating_percentage(product, num):
+    return product.percentage_of_rating(num)
+    
+@register.filter
+def round_num(num):
+    return round(num, 1)
