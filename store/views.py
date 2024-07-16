@@ -300,6 +300,7 @@ def nav_search(request):
 def shop(request):
     products = Product.objects.filter(status="published").order_by("index")
     filtered_products = products
+    filtered_products_initial = products
     products_count = products.count()
     top_selling = Product.objects.filter(status="published").order_by("-orders")[:20]
 
@@ -314,7 +315,7 @@ def shop(request):
         q = get_mapped_query(q.lower())
     
     if q:
-        filtered_products = filtered_products.filter(title__icontains=q) | filtered_products.filter(description__icontains=q)
+        filtered_products = filtered_products.filter(Q(title__icontains=q) | Q(description__icontains=q))
 
     print(f"Initial product count: {products.count()}")
     if q:
@@ -339,6 +340,7 @@ def shop(request):
     
     # Filter products by selected categories
     selected_categories = request.GET.getlist('categories')
+    print("gggg", selected_categories)
     if selected_categories:
         filtered_products = filtered_products.filter(category__meta_title__in=selected_categories)
 
@@ -373,6 +375,10 @@ def shop(request):
         elif sort_by == 'price-high-to-low':
             filtered_products = filtered_products.order_by("index", '-price')
 
+    # Get the product with the highest price
+    lowest_price_product = filtered_products_initial.order_by('price').first().price
+    highest_price_product = filtered_products_initial.order_by('-price').first().price
+
     # Paginate the filtered products
     paginator = Paginator(filtered_products, 20)
     page_number = request.GET.get('page')
@@ -387,7 +393,7 @@ def shop(request):
         "shop_categories": categories,
         "brands": brands,
         "products_count": products_count,
-        "products": pages_filtered_products,
+        "filtered_products": pages_filtered_products,
         "top_selling": top_selling,
         "min_price": min_price,
         "max_price": max_price,
@@ -397,13 +403,16 @@ def shop(request):
         'selected_subcategories': selected_subcategories,
         'selected_brands': selected_brands,
         'selected_ratings': selected_ratings,
+        'lowest_price_product': lowest_price_product,
+        'highest_price_product': highest_price_product,
     }
-    return render(request, "Template\html\shop\shop-4-columns-sidebar.html", context)
+    return render(request, "Template/html/shop/shop-4-columns-sidebar.html", context)
 
 def category_shop(request, meta_title):
     brands = Brand.objects.filter(active=True)
     products = Product.objects.filter(category__meta_title__in=[meta_title], status="published").order_by('index')
     filtered_products = products
+    filtered_products_initial = products
     products_count = products.count()
     top_selling = Product.objects.filter(category__meta_title__in=[meta_title], status="published").order_by("index", "-orders")[:20]
     query_params = request.GET
@@ -465,6 +474,9 @@ def category_shop(request, meta_title):
         elif sort_by == 'price-high-to-low':
             filtered_products = filtered_products.order_by("index", '-price')    
 
+    lowest_price_product = filtered_products_initial.order_by('price').first().price
+    highest_price_product = filtered_products_initial.order_by('-price').first().price
+
     # Paginate the filtered products
     paginator = Paginator(filtered_products, 16)
     page_number = request.GET.get('page')
@@ -472,6 +484,8 @@ def category_shop(request, meta_title):
     latest_products = Product.objects.filter(status="published", category=category).order_by("-date")[:15]
     recomended_products = products.filter(is_recomended=True)
     context = {
+        "highest_price_product": highest_price_product,
+        "lowest_price_product": lowest_price_product,
         "recomended_products": recomended_products,
         "latest_products": latest_products,
         "current_category": category,
@@ -496,6 +510,7 @@ def brand_shop(request, meta_title):
     brand = Brand.objects.get(meta_title=meta_title)
     products = Product.objects.filter(brand=brand, status="published").order_by("index")
     filtered_products = products
+    filtered_products_initial = products
     products_count = products.count()
     top_selling = Product.objects.filter(brand=brand, status="published").order_by("index", "-orders")[:20]
     query_params = request.GET
@@ -559,6 +574,9 @@ def brand_shop(request, meta_title):
         elif sort_by == 'price-high-to-low':
             filtered_products = filtered_products.order_by("index", '-price')  
 
+    lowest_price_product = filtered_products_initial.order_by('price').first().price
+    highest_price_product = filtered_products_initial.order_by('-price').first().price
+
     # Paginate the filtered products
     paginator = Paginator(filtered_products, 16)
     page_number = request.GET.get('page')
@@ -567,6 +585,8 @@ def brand_shop(request, meta_title):
     recomended_products = products.filter(is_recomended=True)
 
     context = {
+        "highest_price_product": highest_price_product,
+        "lowest_price_product": lowest_price_product,
         "recomended_products": recomended_products,
         "latest_products": latest_products,
         "brand": brand,
