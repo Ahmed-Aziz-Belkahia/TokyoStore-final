@@ -384,10 +384,19 @@ def shop(request):
     page_number = request.GET.get('page')
     pages_filtered_products = paginator.get_page(page_number)
 
+
+
     recomended_products = products.filter(is_recomended=True)
     latest_products = Product.objects.filter(status="published").order_by("-date")[:15]
 
+    start_index = pages_filtered_products.start_index()
+    end_index = pages_filtered_products.end_index()
+    total_products = paginator.count
     context = {
+        'start_index': start_index,
+        'end_index': end_index,
+        'total_products': total_products,
+
         "direct_subcategories": direct_subcategories,
         "latest_products": latest_products,
         "shop_categories": categories,
@@ -405,6 +414,9 @@ def shop(request):
         'selected_ratings': selected_ratings,
         'lowest_price_product': lowest_price_product,
         'highest_price_product': highest_price_product,
+        'start_index': start_index,
+        'end_index': end_index,
+        'total_products': total_products,
     }
     return render(request, "Template/html/shop/shop-4-columns-sidebar.html", context)
 
@@ -483,7 +495,13 @@ def category_shop(request, meta_title):
     pages_filtered_products = paginator.get_page(page_number)
     latest_products = Product.objects.filter(status="published", category=category).order_by("-date")[:15]
     recomended_products = products.filter(is_recomended=True)
+    start_index = pages_filtered_products.start_index()
+    end_index = pages_filtered_products.end_index()
+    total_products = paginator.count
     context = {
+        'start_index': start_index,
+        'end_index': end_index,
+        'total_products': total_products,
         "highest_price_product": highest_price_product,
         "lowest_price_product": lowest_price_product,
         "recomended_products": recomended_products,
@@ -492,7 +510,7 @@ def category_shop(request, meta_title):
         "direct_subcategories": direct_subcategories,
         "brands": brands,
         "products_count": products_count,
-        "products": pages_filtered_products,
+        "filtered_products": pages_filtered_products,
         "top_selling": top_selling,
         "min_price": min_price,
         "max_price": max_price,
@@ -584,7 +602,13 @@ def brand_shop(request, meta_title):
     latest_products = Product.objects.filter(status="published", brand=brand).order_by("-date")[:15]
     recomended_products = products.filter(is_recomended=True)
 
+    start_index = pages_filtered_products.start_index()
+    end_index = pages_filtered_products.end_index()
+    total_products = paginator.count
     context = {
+        'start_index': start_index,
+        'end_index': end_index,
+        'total_products': total_products,
         "highest_price_product": highest_price_product,
         "lowest_price_product": lowest_price_product,
         "recomended_products": recomended_products,
@@ -593,7 +617,7 @@ def brand_shop(request, meta_title):
         "direct_subcategories": direct_subcategories,
         "shop_categories": categories,
         "products_count": products_count,
-        "products": pages_filtered_products,
+        "filtered_products": pages_filtered_products,
         "top_selling": top_selling,
         "min_price": min_price,
         "max_price": max_price,

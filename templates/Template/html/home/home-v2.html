@@ -82,7 +82,7 @@
                                     </li> {% endcomment %}
                                     <li class="list-inline-item mr-0 u-header-topbar__nav-item u-header-topbar__nav-item-border">
                                         <!-- Account Sidebar Toggle Button -->
-                                        <a id="sidebarNavToggler" href="javascript:;" role="button" class="u-header-topbar__nav-link"
+                                        <a id="sidebarNavToggler" role="button" class="u-header-topbar__nav-link"
                                             aria-controls="sidebarContent"
                                             aria-haspopup="true"
                                             aria-expanded="false"
@@ -2251,7 +2251,7 @@
 
         <!-- ========== SECONDARY CONTENTS ========== -->
         <!-- Account Sidebar Navigation -->
-        <aside id="sidebarContent" class="u-sidebar u-sidebar__lg" aria-labelledby="sidebarNavToggler">
+        {% comment %} <aside id="sidebarContent" class="u-sidebar u-sidebar__lg" aria-labelledby="sidebarNavToggler">
             <div class="u-sidebar__scroller">
                 <div class="u-sidebar__container">
                     <div class="js-scrollbar u-header-sidebar__footer-offset pb-3">
@@ -2509,7 +2509,7 @@
                     </div>
                 </div>
             </div>
-        </aside>
+        </aside> {% endcomment %}
         <!-- End Account Sidebar Navigation -->
         <!-- ========== END SECONDARY CONTENTS ========== -->
 

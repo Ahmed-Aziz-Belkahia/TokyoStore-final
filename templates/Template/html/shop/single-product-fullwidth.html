@@ -85,7 +85,7 @@
                                     </li> {% endcomment %}
                                     <li class="list-inline-item mr-0 u-header-topbar__nav-item u-header-topbar__nav-item-border">
                                         <!-- Account Sidebar Toggle Button -->
-                                        <a id="sidebarNavToggler" href="javascript:;" role="button" class="u-header-topbar__nav-link"
+                                        <a id="sidebarNavToggler" role="button" class="u-header-topbar__nav-link"
                                             aria-controls="sidebarContent"
                                             aria-haspopup="true"
                                             aria-expanded="false"
@@ -458,10 +458,10 @@
                                         <!-- Card -->
                                         <div class="card border-0 rounded-0">
                                             <div class="card-header bg-primary rounded-0 card-collapse border-0" id="basicsHeadingOne">
-                                                <button type="button" class="btn-link btn-remove-focus btn-block d-flex card-btn py-3 text-lh-1 px-4 shadow-none btn-primary rounded-top-lg border-0 font-weight-bold text-gray-90 collapsed"
+                                                <button type="button" class="btn-link btn-remove-focus btn-block d-flex card-btn py-3 text-lh-1 px-4 shadow-none btn-primary rounded-top-lg border-0 font-weight-bold text-gray-90"
                                                     data-toggle="collapse"
                                                     data-target="#basicsCollapseOne"
-                                                    aria-expanded="false"
+                                                    aria-expanded="true"
                                                     aria-controls="basicsCollapseOne">
                                                     <span class="pl-1 text-gray-90">Shop By Department</span>
                                                     <span class="text-gray-90 ml-3">
@@ -469,7 +469,7 @@
                                                     </span>
                                                 </button>
                                             </div>
-                                            <div id="basicsCollapseOne" class="collapse vertical-menu v1"
+                                            <div id="basicsCollapseOne" class="collapse show vertical-menu v1"
                                                 aria-labelledby="basicsHeadingOne"
                                                 data-parent="#basicsAccordion">
                                                 <div class="card-body p-0">
@@ -547,12 +547,33 @@
                             </div>
                             <!-- End Vertical Menu -->
                             <!-- Search bar -->
+                             <style>
+                                .search-result {
+                                    display: none;
+                                    position: absolute;
+                                    width: 100%;
+                                    background-color: white;
+                                    border: 1px solid #ddd;
+                                    z-index: 1000;
+                                    max-height: 300px;
+                                    overflow-y: auto;
+                                }
+                                
+                                .search-result div {
+                                    padding: 10px;
+                                    cursor: pointer;
+                                }
+                                
+                                .search-result div:hover {
+                                    background-color: #f1f1f1;
+                                }
+                             </style>
                             <div class="col align-self-center">
                                 <!-- Search-Form -->
                                 <form class="js-focus-state">
                                     <label class="sr-only" for="searchProduct">Search</label>
                                     <div class="input-group">
-                                        <input type="email" class="form-control py-2 pl-5 font-size-15 border-0 height-40 rounded-left-pill" name="email" id="searchProduct" placeholder="Search for Products" aria-label="Search for Products" aria-describedby="searchProduct1" required>
+                                        <input type="text" class="form-control py-2 pl-5 font-size-15 border-0 height-40 rounded-left-pill" name="search" id="searchProduct" placeholder="Search for Products" aria-label="Search for Products" aria-describedby="searchProduct1" required>
                                         <div class="input-group-append">
                                             <!-- Select -->
                                             <select class="js-select selectpicker dropdown-select custom-search-categories-select"
@@ -561,7 +582,6 @@
                                                 {% for category in categories.all %}
                                                     <option value="{{category}}">{{category}}</option>
                                                 {% endfor %}
-                                                
                                             </select>
                                             <!-- End Select -->
                                             <button class="btn btn-dark height-40 py-2 px-3 rounded-right-pill" type="button" id="searchProduct1">
@@ -570,6 +590,7 @@
                                         </div>
                                     </div>
                                 </form>
+                                <div id="searchResult" class="search-result"></div>
                                 <!-- End Search-Form -->
                             </div>
                             <!-- End Search bar -->
@@ -1723,7 +1744,7 @@
 
         <!-- ========== SECONDARY CONTENTS ========== -->
         <!-- Account Sidebar Navigation -->
-        <aside id="sidebarContent" class="u-sidebar u-sidebar__lg" aria-labelledby="sidebarNavToggler">
+        {% comment %} <aside id="sidebarContent" class="u-sidebar u-sidebar__lg" aria-labelledby="sidebarNavToggler">
             <div class="u-sidebar__scroller">
                 <div class="u-sidebar__container">
                     <div class="js-scrollbar u-header-sidebar__footer-offset pb-3">
@@ -1981,7 +2002,7 @@
                     </div>
                 </div>
             </div>
-        </aside>
+        </aside> {% endcomment %}
         <!-- End Account Sidebar Navigation -->
         <!-- ========== END SECONDARY CONTENTS ========== -->
 
