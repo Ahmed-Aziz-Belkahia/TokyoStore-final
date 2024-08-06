@@ -1,5 +1,5 @@
 <h3>
-    Step-by-step setup installation guide for a Django project named "ecommerce_prj." This assumes you have Python and Django already installed on your system. If not, make sure to install Python and set up a virtual environment first.
+    Step-by-step setup installation guide for a Django project named "tokyostore." This assumes you have Python and Django already installed on your system. If not, make sure to install Python and set up a virtual environment first.
 </h3>
 
 ### Step 1: Clone the Project
@@ -10,14 +10,14 @@
 
 3. Clone the project from a Git repository (replace `<repository_url>` with the actual repository URL) or download from link and unzip file:
    ```bash
-   git clone <repository_url> ecommerce_prj
+   git clone <repository_url> tokyostore
    ```
 
 ### Step 2: Create a Virtual Environment (Optional but Recommended)
 
 1. Navigate to the project directory:
    ```bash
-   cd ecommerce_prj
+   cd tokyostore
    ```
 
 2. Create a virtual environment (optional but recommended to isolate project dependencies):
@@ -71,7 +71,7 @@
 
 ### Step 7: Start Developing
 
-You're now set up to start developing your Django project "ecommerce_prj." You can build and customize your application by adding models, views, templates, and other components as needed.
+You're now set up to start developing your Django project "tokyostore." You can build and customize your application by adding models, views, templates, and other components as needed.
 
 Remember to deactivate the virtual environment when you're done working on your project:
 ```bash

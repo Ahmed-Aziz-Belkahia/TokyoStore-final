@@ -1,1 +1,1 @@
-web: gunicorn ecommerce_prj.wsgi --log-file -
+web: gunicorn tokyostore.wsgi --log-file -
