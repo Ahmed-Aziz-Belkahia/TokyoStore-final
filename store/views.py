@@ -396,7 +396,6 @@ def shop(request):
         'start_index': start_index,
         'end_index': end_index,
         'total_products': total_products,
-
         "direct_subcategories": direct_subcategories,
         "latest_products": latest_products,
         "shop_categories": categories,
@@ -1835,6 +1834,7 @@ def delete_item_from_cart(request):
 
     context = render_to_string("store/async/cart-list.html", {"cart_data": request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']), 'cart_total_amount': cart_total_amount, 'total_shipping_amount': shipping_amount_, 'total_tax': tax_amount, "cs": cs, 'total_amount': total_amount, 'product_processing_fee_': product_processing_fee_, "tax_country": tax_country})
     return JsonResponse({"data": context, 'totalcartitems': len(request.session['cart_data_obj'])})
+
 
 def update_cart(request):
     product_id = str(request.GET['id'])
