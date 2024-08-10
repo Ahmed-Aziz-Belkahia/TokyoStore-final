@@ -175,7 +175,7 @@
                                                             <!-- Home Section -->
                                                             {% for category in categories %}
                                                                 <li class="u-has-submenu u-header-collapse__submenu">
-                                                                    <a class="u-header-collapse__nav-link u-header-collapse__nav-pointer" href="javascript:;" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="cat{{category.id}}" data-target="#cat{{category.id}}">
+                                                                    <a class="u-header-collapse__nav-link u-header-collapse__nav-pointer" href="{% url "store:category-shop" meta_title=category.meta_title %}" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="cat{{category.id}}" data-target="#cat{{category.id}}">
                                                                         {{category}}
                                                                     </a>
 
@@ -183,7 +183,7 @@
                                                                         <ul id="headerSidebar{{category.id}}Menu" class="u-header-collapse__nav-list">
                                                                             <!-- Home - v1 -->
                                                                             {% for subcategory in category.subcategories.all %}
-                                                                                <li><a class="u-header-collapse__submenu-nav-link" href="../home/index.html">{{subcategory.title}}</a></li>
+                                                                                <li><a class="u-header-collapse__submenu-nav-link" href="{% url "store:category-shop" meta_title=category.meta_title %}?subcategories={{subcategory.meta_title}}">{{subcategory.title}}</a></li>
                                                                             {% endfor %}
                                                                             <!-- End 404 -->
                                                                         </ul>
@@ -506,9 +506,9 @@
                                                                                 <div class="col mb-3 mb-sm-0">
                                                                                     <span class="u-header__sub-menu-title">{{category}}</span>
                                                                                     <ul class="u-header__sub-menu-nav-group mb-3">
-                                                                                        <li><a class="nav-link u-header__sub-menu-nav-link" href="#">All {{category}}</a></li>
+                                                                                        <li><a class="nav-link u-header__sub-menu-nav-link" href="{% url "store:category-shop" meta_title=category.meta_title %}">All {{category}}</a></li>
                                                                                         {% for subcategory in category.subcategories.all %}
-                                                                                            <li><a class="nav-link u-header__sub-menu-nav-link" href="#">{{subcategory.title}}</a></li>
+                                                                                            <li><a class="nav-link u-header__sub-menu-nav-link" href="{% url "store:category-shop" meta_title=category.meta_title %}?subcategories={{subcategory.meta_title}}">{{subcategory.title}}</a></li>
                                                                                         {% endfor %}
                                                                                         {% comment %} <li>
                                                                                             <a class="nav-link u-header__sub-menu-nav-link u-nav-divider border-top pt-2 flex-column align-items-start" href="#">
@@ -577,7 +577,7 @@
                                                 data-style="btn height-40 text-gray-60 font-weight-normal border-0 rounded-0 bg-white px-5 py-2">
                                                 <option value="one" selected>All Categories</option>
                                                 {% for category in categories.all %}
-                                                    <option value="{{category}}">{{category}}</option>
+                                                    <option value="{{category.meta_title}}">{{category}}</option>
                                                 {% endfor %}
                                             </select>
                                             <!-- End Select -->
@@ -641,7 +641,7 @@
                                                     data-scs-animation-delay="200">
                                                     {{hero.hero_text}}
                                                 </h1>
-                                                <a href="../shop/single-product-fullwidth.html" class="btn btn-primary transition-3d-hover rounded-lg  py-2 px-md-7 px-3 font-size-16"
+                                                <a href="{% url "store:product-detail" meta_title=hero.meta_title %}" class="btn btn-primary transition-3d-hover rounded-lg  py-2 px-md-7 px-3 font-size-16"
                                                     data-scs-animation-in="fadeInUp"
                                                     data-scs-animation-delay="300">
                                                     Start Buying
@@ -694,7 +694,7 @@
                                                         <div class="product-item__outer h-100">
                                                             <div class="product-item__inner py-md-3 mx-3 border-bottom row no-gutters">
                                                                 <div class="col-auto product-media-left">
-                                                                    <a href="../shop/single-product-fullwidth.html" class="max-width-70 d-block"><img class="img-fluid" src="{{product.image.url}}" alt="Image Description"></a>
+                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}l" class="max-width-70 d-block"><img class="img-fluid" src="{{product.image.url}}" alt="Image Description"></a>
                                                                 </div>
                                                                 <div class="col product-item__body pl-2 pl-lg-3">
                                                                     <div class="mb-4">
@@ -719,7 +719,7 @@
                                                         <div class="product-item__outer h-100">
                                                             <div class="product-item__inner py-md-3 mx-3 border-bottom row no-gutters">
                                                                 <div class="col-auto product-media-left">
-                                                                    <a href="../shop/single-product-fullwidth.html" class="max-width-70 d-block"><img class="img-fluid" src="{{product.image.url}}" alt="Image Description"></a>
+                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="max-width-70 d-block"><img class="img-fluid" src="{{product.image.url}}" alt="Image Description"></a>
                                                                 </div>
                                                                 <div class="col product-item__body pl-2 pl-lg-3">
                                                                     <div class="mb-4">
@@ -744,7 +744,7 @@
                                                         <div class="product-item__outer h-100">
                                                             <div class="product-item__inner py-md-3 mx-3 border-bottom row no-gutters">
                                                                 <div class="col-auto product-media-left">
-                                                                    <a href="../shop/single-product-fullwidth.html" class="max-width-70 d-block"><img class="img-fluid" src="{{product.image.url}}" alt="Image Description"></a>
+                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="max-width-70 d-block"><img class="img-fluid" src="{{product.image.url}}" alt="Image Description"></a>
                                                                 </div>
                                                                 <div class="col product-item__body pl-2 pl-lg-3">
                                                                     <div class="mb-4">
@@ -858,8 +858,8 @@
                                                                 <div class="mb-2">
                                                                     <a href="{% url "store:product-detail" meta_title=product.meta_title %}" class="d-block text-center"><img class="img-fluid" src="{{product.image.url}}" alt="Image Description"></a>
                                                                 </div>
-                                                                <div class="mb-2"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5">{{product.category.title}}</a></div>
-                                                                <h5 class="mb-4 product-item__title"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">{{product.title}}</a></h5>
+                                                                <div class="mb-2"><a href="{% url "store:category-shop" meta_title=product.category.meta_title %}" class="font-size-12 text-gray-5">{{product.category.title}}</a></div>
+                                                                <h5 class="mb-4 product-item__title"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{product.title}}</a></h5>
                                                                 <div class="mb-1">
                                                                     <div class="prodcut-price">
                                                                         <div class="text-gray-100">TND {{product.price}}</div>
@@ -896,7 +896,7 @@
                                                     <div class="mb-3">
                                                         <a href="{% url "blog:blog-detail" meta_title=post.meta_title %}" class="d-block text-center"><img class="img-fluid" src="{{post.outer_image.url}}" alt="Image Description"></a>
                                                     </div>
-                                                    <div class="mb-1"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5">{{post.category}}</a></div>
+                                                    <div class="mb-1"><a href="{% url "blog:category_detail" meta_title=post.category.meta_title %}" class="font-size-12 text-gray-5">{{post.category}}</a></div>
                                                     <h6 class="mb-2 post-item__title font-size-14"><a href="{% url "blog:blog-detail" meta_title=post.meta_title %}" class="font-weight-bold text-dark">{{post.title}}</a></h6>
                                                     <div class="mb-1">
                                                         <a href="{% url "blog:blog-detail" meta_title=post.meta_title %}" class="d-block text-gray-5"><i class="ec ec-comment"></i> {{post.comments.count}}</a>
@@ -917,7 +917,7 @@
                             
                             {% for subcategory in deals_subcategories.all %}
                                 <div class="col-md-6 mb-4 mb-xl-0 col-wd-4">
-                                    <a href="../shop/shop.html" class="d-black text-gray-90">
+                                    <a href="{% url "store:category-shop" meta_title=subcategory.category.meta_title %}?subcategories={{subcategory.meta_title}}" class="d-black text-gray-90">
                                         <div class="min-height-166 py-1 py-xl-2 py-wd-4 d-flex bg-gray-1 align-items-center">
                                             <div class="col-6 col-xl-7 col-wd-6 pr-0">
                                                 <img class="img-fluid" src="{{subcategory.deal_image.url}}" alt="Image Description">
@@ -926,7 +926,7 @@
                                                 <div class="mb-2 pb-1 font-size-18 font-weight-light text-ls-n1 text-lh-23">
                                                     CATCH BIG <strong>DEALS</strong> ON {{subcategory.title}}
                                                 </div>
-                                                <div class="link text-gray-90 font-weight-bold font-size-15" href="#">
+                                                <div class="link text-gray-90 font-weight-bold font-size-15" href="{% url "store:category-shop" meta_title=subcategory.category.meta_title %}?subcategories={{subcategory.meta_title}}">
                                                     Shop now
                                                     <span class="link__icon ml-1">
                                                         <span class="link__icon-inner"><i class="ec ec-arrow-right-categproes"></i></span>
@@ -1170,7 +1170,7 @@
                                                         <div class="mb-4 mb-md-0">
                                                             <div class="row align-items-center">
                                                                 <div class="col">
-                                                                    <a href="../shop/single-product-fullwidth.html" class="d-block text-center"><img class="img-fluid mx-auto" src="{{product.deal_of_the_week_image.url}}" alt="{{product.alt}}"></a>
+                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="d-block text-center"><img class="img-fluid mx-auto" src="{{product.deal_of_the_week_image.url}}" alt="{{product.alt}}"></a>
                                                                 </div>
 
                                                                 <div class="col-auto d-none d-xl-block d-wd-none">
@@ -1254,7 +1254,7 @@
                                                     </div>
                                                     <div class="col-md-6 col-xl-5 col-wd-6">
                                                         <div class="space-top-xl-2 space-top-wd-0 mt-xl-4 mt-wd-0">
-                                                            <h5 class="mb-3 mb-xl-2 mb-wd-1 font-size-14 text-center mx-auto max-width-180 text-lh-18"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">{{product.title}}</a></h5>
+                                                            <h5 class="mb-3 mb-xl-2 mb-wd-1 font-size-14 text-center mx-auto max-width-180 text-lh-18"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{product.title}}</a></h5>
                                                             <div class="d-flex align-items-center justify-content-center mb-3">
                                                                 <del class="font-size-18 mr-2 text-gray-2">TND {{product.old_price}}</del>
                                                                 <ins class="font-size-xl-30 font-size-wd-25 text-red text-decoration-none">TND{{product.price}}</ins>
@@ -1356,17 +1356,17 @@
                                                 <div class="product-item__outer h-100">
                                                     <div class="product-item__inner p-md-3 row no-gutters">
                                                         <div class="col col-lg-auto col-xl-5 col-wd-auto product-media-left">
-                                                            <a href="#" class="max-width-150 d-block">
+                                                            <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="max-width-150 d-block">
                                                                 <img class="img-fluid" src="{{product.image.url}}" alt="Image Description">
                                                             </a>
                                                         </div>
                                                         <div class="col col-xl-7 col-wd product-item__body pl-2 pl-lg-3 pl-xl-0 pl-wd-3 mr-wd-1">
                                                             <div class="mb-4 mb-xl-2 mb-wd-4">
                                                                 <div class="mb-2">
-                                                                    <a href="#" class="font-size-12 text-gray-5">{{ product.category }}</a>
+                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="font-size-12 text-gray-5">{{ product.category }}</a>
                                                                 </div>
                                                                 <h5 class="product-item__title">
-                                                                    <a href="#" class="text-blue font-weight-bold">{{ product.title }}</a>
+                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{ product.title }}</a>
                                                                 </h5>
                                                             </div>
                                                             <div class="flex-center-between mb-3">
@@ -1374,13 +1374,13 @@
                                                                     <div class="text-gray-100">TND {{ product.price }}</div>
                                                                 </div>
                                                                 <div class="d-none d-xl-block prodcut-add-cart">
-                                                                    <a href="#" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
                                                                 </div>
                                                             </div>
                                                             <div class="product-item__footer">
                                                                 <div class="border-top pt-2 flex-center-between flex-wrap">
-                                                                    <a href="#" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
-                                                                    <a href="#" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
+                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
+                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1404,17 +1404,17 @@
                                                     <div class="product-item__outer h-100">
                                                         <div class="product-item__inner p-md-3 row no-gutters">
                                                             <div class="col col-lg-auto col-xl-5 col-wd-auto product-media-left">
-                                                                <a href="#" class="max-width-150 d-block">
+                                                                <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="max-width-150 d-block">
                                                                     <img class="img-fluid" src="{{product.image.url}}" alt="Image Description">
                                                                 </a>
                                                             </div>
                                                             <div class="col col-xl-7 col-wd product-item__body pl-2 pl-lg-3 pl-xl-0 pl-wd-3 mr-wd-1">
                                                                 <div class="mb-4 mb-xl-2 mb-wd-4">
                                                                     <div class="mb-2">
-                                                                        <a href="#" class="font-size-12 text-gray-5">{{ product.category }}</a>
+                                                                        <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="font-size-12 text-gray-5">{{ product.category }}</a>
                                                                     </div>
                                                                     <h5 class="product-item__title">
-                                                                        <a href="#" class="text-blue font-weight-bold">{{ product.title }}</a>
+                                                                        <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{ product.title }}</a>
                                                                     </h5>
                                                                 </div>
                                                                 <div class="flex-center-between mb-3">
@@ -1422,13 +1422,13 @@
                                                                         <div class="text-gray-100">TND {{ product.price }}</div>
                                                                     </div>
                                                                     <div class="d-none d-xl-block prodcut-add-cart">
-                                                                        <a href="#" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                                        <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
                                                                     </div>
                                                                 </div>
                                                                 <div class="product-item__footer">
                                                                     <div class="border-top pt-2 flex-center-between flex-wrap">
-                                                                        <a href="#" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
-                                                                        <a href="#" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
+                                                                        <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
+                                                                        <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1465,7 +1465,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-auto">
-                                        <a href="../shop/shop.html" class="d-block">
+                                        <a href="{% url "store:product-detail" meta_title=category.featured_product.meta_title%}" class="d-block">
                                             <img class="img-fluid" src="{{ category.featured_product.category_feature.url }}" alt="{{ category.featured_product.alt }}">
                                         </a>
                                     </div>
@@ -1476,17 +1476,17 @@
                                                 <div class="product-item__outer h-100">
                                                     <div class="product-item__inner px-xl-4 p-3">
                                                         <div class="product-item__body pb-xl-2">
-                                                            <div class="mb-2"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5">{{ product.category }}</a></div>
-                                                            <h5 class="mb-1 product-item__title"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">{{ product.title }}</a></h5>
+                                                            <div class="mb-2"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="font-size-12 text-gray-5">{{ product.category }}</a></div>
+                                                            <h5 class="mb-1 product-item__title"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{ product.title }}</a></h5>
                                                             <div class="mb-2">
-                                                                <a href="../shop/single-product-fullwidth.html" class="d-block text-center"><img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.alt }}"></a>
+                                                                <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="d-block text-center"><img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.alt }}"></a>
                                                             </div>
                                                             <div class="flex-center-between mb-1">
                                                                 <div class="prodcut-price">
                                                                     <div class="text-gray-100">TND {{ product.price }}</div>
                                                                 </div>
                                                                 <div class="d-none d-xl-block prodcut-add-cart">
-                                                                    <a href="../shop/single-product-fullwidth.html" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1510,17 +1510,17 @@
                                                 <div class="product-item__outer h-100">
                                                     <div class="product-item__inner px-xl-4 p-3">
                                                         <div class="product-item__body pb-xl-2">
-                                                            <div class="mb-2"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5">{{ product.category }}</a></div>
-                                                            <h5 class="mb-1 product-item__title"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">{{ product.title }}</a></h5>
+                                                            <div class="mb-2"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="font-size-12 text-gray-5">{{ product.category }}</a></div>
+                                                            <h5 class="mb-1 product-item__title"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{ product.title }}</a></h5>
                                                             <div class="mb-2">
-                                                                <a href="../shop/single-product-fullwidth.html" class="d-block text-center"><img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.alt }}"></a>
+                                                                <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="d-block text-center"><img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.alt }}"></a>
                                                             </div>
                                                             <div class="flex-center-between mb-1">
                                                                 <div class="prodcut-price">
                                                                     <div class="text-gray-100">TND {{ product.price }}</div>
                                                                 </div>
                                                                 <div class="d-none d-xl-block prodcut-add-cart">
-                                                                    <a href="../shop/single-product-fullwidth.html" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1673,7 +1673,7 @@
                             <div class="row">
                                 {% for product in small_boxes|get:2 %}
                                     <div class="col-md-6 mb-3 mb-md-0">
-                                        <a href="../shop/shop.html">
+                                        <a href="{% url "store:product-detail" meta_title=product.meta_title%}">
                                             <img class="img-fluid" src="{{product.small_box_image.url}}" alt="{{product.alt}}">
                                         </a>
                                     </div>
@@ -1734,17 +1734,17 @@
                                                 <div class="product-item__outer h-100">
                                                     <div class="product-item__inner px-wd-4 p-2 p-md-3">
                                                         <div class="product-item__body pb-xl-2">
-                                                            <div class="mb-2"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5">{{ product.category }}</a></div>
-                                                            <h5 class="mb-1 product-item__title"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">{{ product.title }}</a></h5>
+                                                            <div class="mb-2"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="font-size-12 text-gray-5">{{ product.category }}</a></div>
+                                                            <h5 class="mb-1 product-item__title"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{ product.title }}</a></h5>
                                                             <div class="mb-2">
-                                                                <a href="../shop/single-product-fullwidth.html" class="d-block text-center"><img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.alt }}"></a>
+                                                                <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="d-block text-center"><img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.alt }}"></a>
                                                             </div>
                                                             <div class="flex-center-between mb-1">
                                                                 <div class="prodcut-price">
                                                                     <div class="text-gray-100">TND {{ product.price }}</div>
                                                                 </div>
                                                                 <div class="d-none d-xl-block prodcut-add-cart">
-                                                                    <a href="../shop/single-product-fullwidth.html" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1797,17 +1797,17 @@
                                                 <div class="product-item__outer h-100">
                                                     <div class="product-item__inner px-wd-4 p-2 p-md-3">
                                                         <div class="product-item__body pb-xl-2">
-                                                            <div class="mb-2"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5">{{ product.category }}</a></div>
-                                                            <h5 class="mb-1 product-item__title"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">{{ product.title }}</a></h5>
+                                                            <div class="mb-2"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="font-size-12 text-gray-5">{{ product.category }}</a></div>
+                                                            <h5 class="mb-1 product-item__title"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{ product.title }}</a></h5>
                                                             <div class="mb-2">
-                                                                <a href="../shop/single-product-fullwidth.html" class="d-block text-center"><img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.alt }}"></a>
+                                                                <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="d-block text-center"><img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.alt }}"></a>
                                                             </div>
                                                             <div class="flex-center-between mb-1">
                                                                 <div class="prodcut-price">
                                                                     <div class="text-gray-100">TND {{ product.price }}</div>
                                                                 </div>
                                                                 <div class="d-none d-xl-block prodcut-add-cart">
-                                                                    <a href="../shop/single-product-fullwidth.html" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
+                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1954,7 +1954,7 @@
                                     }]'>
                                     {% for brand in brands %}
                                         <div class="js-slide">
-                                            <a href="#" class="link-hover__brand">
+                                            <a href="{% url "store:brand-shop" meta_title=brand.meta_title%}" class="link-hover__brand">
                                                 <img class="img-fluid m-auto max-height-50" src="{{brand.image.url}}" alt="{{brand.alt}}">
                                             </a>
                                         </div>
@@ -1993,7 +1993,7 @@
                         }]'>
                         {% for brand in brands %}
                             <div class="js-slide">
-                                <a href="#" class="link-hover__brand">
+                                <a href="{% url "store:brand-shop" meta_title=brand.meta_title%}" class="link-hover__brand">
                                     <img class="img-fluid m-auto max-height-50" src="{{brand.image.url}}" alt="{{brand.alt}}">
                                 </a>
                             </div>
@@ -2019,10 +2019,10 @@
                                 {% for product in bottom_top_products %}
                                     <li class="product-item product-item__list row no-gutters mb-6 remove-divider">
                                         <div class="col-auto">
-                                            <a href="../shop/single-product-fullwidth.html" class="d-block width-75 text-center"><img class="img-fluid" src="{{product.footer_image.url}}" alt="Image Description"></a>
+                                            <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="d-block width-75 text-center"><img class="img-fluid" src="{{product.footer_image.url}}" alt="Image Description"></a>
                                         </div>
                                         <div class="col pl-4 d-flex flex-column">
-                                            <h5 class="product-item__title mb-0"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">{{product.title}}</a></h5>
+                                            <h5 class="product-item__title mb-0"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{product.title}}</a></h5>
                                             <div class="prodcut-price mt-auto">
                                                 <div class="font-size-15">TND {{product.price}}</div>
                                             </div>
@@ -2040,10 +2040,10 @@
                             {% for product in footer_on_sale_products %}
                                     <li class="product-item product-item__list row no-gutters mb-6 remove-divider">
                                         <div class="col-auto">
-                                            <a href="../shop/single-product-fullwidth.html" class="d-block width-75 text-center"><img class="img-fluid" src="{{product.footer_image.url}}" alt="Image Description"></a>
+                                            <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="d-block width-75 text-center"><img class="img-fluid" src="{{product.footer_image.url}}" alt="Image Description"></a>
                                         </div>
                                         <div class="col pl-4 d-flex flex-column">
-                                            <h5 class="product-item__title mb-0"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">{{product.title}}</a></h5>
+                                            <h5 class="product-item__title mb-0"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{product.title}}</a></h5>
                                             <div class="prodcut-price mt-auto">
                                                 <div class="font-size-15">TND {{product.price}}</div>
                                             </div>
@@ -2061,10 +2061,10 @@
                             {% for product in footer_top_products %}
                                 <li class="product-item product-item__list row no-gutters mb-6 remove-divider">
                                     <div class="col-auto">
-                                        <a href="../shop/single-product-fullwidth.html" class="d-block width-75 text-center"><img class="img-fluid" src="{{product.footer_image.url}}" alt="{{product.alt}}"></a>
+                                        <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="d-block width-75 text-center"><img class="img-fluid" src="{{product.footer_image.url}}" alt="{{product.alt}}"></a>
                                     </div>
                                     <div class="col pl-4 d-flex flex-column">
-                                        <h5 class="product-item__title mb-0"><a href="../shop/single-product-fullwidth.html" class="text-blue font-weight-bold">{{product.title}}</a></h5>
+                                        <h5 class="product-item__title mb-0"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{product.title}}</a></h5>
                                         <div class="text-warning mb-2">
                                             <small class="fas fa-star"></small>
                                             <small class="fas fa-star"></small>
@@ -2081,7 +2081,7 @@
                         </ul>
                     </div>
                     <div class="col-wd-3 d-none d-wd-block">
-                        <a href="../shop/shop.html" class="d-block"><img class="img-fluid" src="{{footer_featured.footer_banner.url}}" alt="Image Description"></a>
+                        <a href="{% url "store:product-detail" meta_title=footer_featured.meta_title%}" class="d-block"><img class="img-fluid" src="{{footer_featured.footer_banner.url}}" alt="Image Description"></a>
                     </div>
                 </div>
             </div>
