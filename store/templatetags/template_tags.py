@@ -58,4 +58,7 @@ def rating_percentage(product, num):
     
 @register.filter
 def round_num(num):
-    return round(num, 1)
+    if num:
+        return round(num, 1)
+    else:
+        return 0
