@@ -139,7 +139,7 @@
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
     <link rel="stylesheet" href="{% static 'css/dashbord_navitaion.css' %}" />
 
-    <link rel="shortcut icon" href="{% static "favicon.png" %}">
+    <link rel="shortcut icon" href='{% static "favicon.png" %}'>
     <!-- Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap"
@@ -147,22 +147,17 @@
     />
 
     <!-- CSS Implementing Plugins -->
-    <link rel="stylesheet" href="{% static
-    "assets/vendor/font-awesome/css/fontawesome-all.min.css" %}"> <link
-    rel="stylesheet" href="{% static "assets/css/font-electro.css" %}"> <link
-    rel="stylesheet" href="{% static "assets/vendor/animate.css/animate.min.css"
-    %}"> <link rel="stylesheet" href="{% static
-    "assets/vendor/hs-megamenu/src/hs.megamenu.css" %}"> <link rel="stylesheet"
-    href="{% static
-    "assets/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css"
-    %}"> <link rel="stylesheet" href="{% static
-    "assets/vendor/fancybox/jquery.fancybox.css" %}"> <link rel="stylesheet"
-    href="{% static "assets/vendor/slick-carousel/slick/slick.css" %}"> <link
-    rel="stylesheet" href="{% static
-    "assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" %}">
+    <link rel="stylesheet" href='{% static "assets/vendor/font-awesome/css/fontawesome-all.min.css" %}'> <link
+    rel="stylesheet" href='{% static "assets/css/font-electro.css" %}'> <link
+    rel="stylesheet" href='{% static "assets/vendor/animate.css/animate.min.css"%}'> 
+    <link rel="stylesheet" href='{% static "assets/vendor/hs-megamenu/src/hs.megamenu.css" %}'> 
+    <link rel="stylesheet" href='{% static "assets/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" %}'> 
+    <link rel="stylesheet" href='{% static "assets/vendor/fancybox/jquery.fancybox.css" %}'> 
+    <link rel="stylesheet" href='{% static "assets/vendor/slick-carousel/slick/slick.css" %}'> 
+    <link rel="stylesheet" href='{% static "assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" %}'>
 
     <!-- CSS Electro Template -->
-    <link rel="stylesheet" href="{% static "assets/css/theme.css" %}">
+    <link rel="stylesheet" href='{% static "assets/css/theme.css" %}'>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -215,8 +210,8 @@
     </div> {% endcomment %}
 
     <div>
-      {% if '1' in basic_addon.header_type %} {% endif %} {% if '2' in
-      basic_addon.header_type %}
+      {% if '1' in basic_addon.header_type %} {% endif %} 
+      {% if '2' in basic_addon.header_type %} {% endif %} 
 
       <!-- <div class="preloader"></div> -->
       <header id="header" class="u-header u-header-left-aligned-nav">
@@ -342,7 +337,7 @@
                     <!-- Logo -->
                     <a
                       class="order-1 order-xl-0 navbar-brand u-header__navbar-brand u-header__navbar-brand-center"
-                      href="../home/index.html"
+                      href="/"
                       aria-label="Electro"
                     >
                       <img src="{% static "assets/logo/logo.png" %}"
@@ -419,7 +414,7 @@
                               <!-- Logo -->
                               <a
                                 class="d-flex ml-0 navbar-brand u-header__navbar-brand u-header__navbar-brand-vertical"
-                                href="../home/index.html"
+                                href="/"
                                 aria-label="Electro"
                               >
                                 <img src="{% static "assets/logo/logo.png" %}"

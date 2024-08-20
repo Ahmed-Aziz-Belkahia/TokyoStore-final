@@ -113,7 +113,7 @@
                                 <!-- Nav -->
                                 <nav class="navbar navbar-expand u-header__navbar py-0 justify-content-xl-between max-width-270 min-width-270">
                                     <!-- Logo -->
-                                    <a class="order-1 order-xl-0 navbar-brand u-header__navbar-brand u-header__navbar-brand-center" href="../home/index.html" aria-label="Electro">
+                                    <a class="order-1 order-xl-0 navbar-brand u-header__navbar-brand u-header__navbar-brand-center" href="/" aria-label="Electro">
                                         <img src="{% static "assets/logo/logo.png" %}" alt="tokyostore">
                                     </a>
                                     <!-- End Logo -->
@@ -165,7 +165,7 @@
                                                 <div class="js-scrollbar u-sidebar__body">
                                                     <div id="headerSidebarContent" class="u-sidebar__content u-header-sidebar__content">
                                                         <!-- Logo -->
-                                                        <a class="d-flex ml-0 navbar-brand u-header__navbar-brand u-header__navbar-brand-vertical" href="../home/index.html" aria-label="Electro">
+                                                        <a class="d-flex ml-0 navbar-brand u-header__navbar-brand u-header__navbar-brand-vertical" href="/" aria-label="Electro">
                                                             <img src="{% static "assets/logo/logo.png" %}" alt="tokyostore">
                                                         </a>
                                                         <!-- End Logo -->
@@ -183,7 +183,7 @@
                                                                         <ul id="headerSidebar{{category.id}}Menu" class="u-header-collapse__nav-list">
                                                                             <!-- Home - v1 -->
                                                                             {% for subcategory in category.subcategories.all %}
-                                                                                <li><a class="u-header-collapse__submenu-nav-link" href="../home/index.html">{{subcategory.title}}</a></li>
+                                                                                <li><a class="u-header-collapse__submenu-nav-link" href="/">{{subcategory.title}}</a></li>
                                                                             {% endfor %}
                                                                             <!-- End 404 -->
                                                                         </ul>
@@ -604,7 +604,7 @@
                     <div class="my-md-3">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb mb-3 flex-nowrap flex-xl-wrap overflow-auto overflow-xl-visble">
-                                <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1"><a href="../home/index.html">Home</a></li>
+                                <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1"><a href="/">Home</a></li>
                                 <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1 active" aria-current="page">Error 404</li>
                             </ol>
                         </nav>
