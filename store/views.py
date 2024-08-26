@@ -117,7 +117,10 @@ def index(request):
 
     home_featured_categories = Category.objects.filter(home_feature=True, upper_half=False)
     first_home_featured_categories = Category.objects.filter(home_feature=True, upper_half=True)
-    viewed_items = RecentlyViewed.objects.filter(user=request.user).order_by('-timestamp')[:20]
+    if request.user.is_authenticated:
+        viewed_items = RecentlyViewed.objects.filter(user=request.user).order_by('-timestamp')[:20]
+    else:
+        viewed_items = []
 
     small_boxes = Product.objects.filter(home_small_box=True)
 

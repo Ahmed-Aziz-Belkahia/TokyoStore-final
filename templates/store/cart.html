@@ -1,4 +1,4 @@
-{% extends "partials/base-tk.html" %}
+{% extends "partials/base.html" %}
 {% load static %}
 {% block title %}
     Panier
@@ -6,9 +6,6 @@
 {% block content %}
 {% load crispy_forms_tags %}
 <style>
-  btn.w100.mt-4.purple-btn {
-    background-color: lime
-  }
   ul,
   li {
     list-style: none;
@@ -120,7 +117,6 @@
   }
   .purple-btn{
     color: white !important;
-    background-color: lime !important;
   }
 </style>
 <div class="body_content_wrapper position-relative" id="cartList">
@@ -311,7 +307,6 @@
           </div>
 
           <a
-            style="background-color: lime"
             href="{% url 'store:shipping_address' %}"
             class="btn w100 mt-4 purple-btn"
             >Continue</a
@@ -320,9 +315,6 @@
       </div>
     </div>
   </section>
-
-  <!-- ========== SECONDARY CONTENTS ========== -->
-
 </div>
 
 <script>
@@ -368,6 +360,8 @@
             reloadPrices(selectedShippingMethod);
         });
     });
+
+    document.querySelector('.ship_to_home').click();
 });
 
 function reloadPrices(selectedShippingMethod) {

@@ -303,7 +303,7 @@
                                                             <span class="u-header__sub-menu-title">Ecommerce Pages</span>
                                                             <ul class="u-header__sub-menu-nav-group">
                                                                 <li><a href="../shop/shop.html" class="nav-link u-header__sub-menu-nav-link">Shop</a></li>
-                                                                <li><a href="../shop/cart.html" class="nav-link u-header__sub-menu-nav-link">Cart</a></li>
+                                                                <li><a href="{% url "store:cart-view" %}" class="nav-link u-header__sub-menu-nav-link">Cart</a></li>
                                                                 <li><a href="../shop/checkout.html" class="nav-link u-header__sub-menu-nav-link">Checkout</a></li>
                                                                 <li><a href="../shop/my-account.html" class="nav-link u-header__sub-menu-nav-link">My Account</a></li>
                                                                 <li><a href="../shop/track-your-order.html" class="nav-link u-header__sub-menu-nav-link">Track your Order</a></li>
@@ -601,7 +601,7 @@
                                         <li class="col"><a href="../shop/compare.html" class="text-gray-90" data-toggle="tooltip" data-placement="top" title="Compare"><i class="font-size-22 ec ec-compare"></i></a></li>
                                         <li class="col"><a href="{% url "core:buyer-wishlist" %}" class="text-gray-90" data-toggle="tooltip" data-placement="top" title="Favorites"><i class="font-size-22 ec ec-favorites"></i></a></li>
                                         <li class="col pr-0">
-                                            <a href="../shop/cart.html" class="text-gray-90 position-relative d-flex " data-toggle="tooltip" data-placement="top" title="Cart">
+                                            <a href="{% url "store:cart-view" %}" class="text-gray-90 position-relative d-flex " data-toggle="tooltip" data-placement="top" title="Cart">
                                                 <i class="font-size-22 ec ec-shopping-bag"></i>
                                                 <span class="width-22 height-22 bg-dark position-absolute flex-content-center text-white rounded-circle left-12 top-8 font-weight-bold font-size-12">{{request.session.cart_data_obj|length}}</span>
                                                 <span class="font-weight-bold font-size-16 text-gray-90 ml-3">TND {{request.session.cart_data_obj.cart_total_amount|default:0}}</span>
@@ -1009,9 +1009,9 @@
                             <li class="nav-item flex-shrink-0 flex-xl-shrink-1 z-index-2">
                                 <a class="nav-link" id="Jpills-three-example1-tab" data-toggle="pill" href="#Jpills-three-example1" role="tab" aria-controls="Jpills-three-example1" aria-selected="false">Specification</a>
                             </li>
-                            <li class="nav-item flex-shrink-0 flex-xl-shrink-1 z-index-2">
+                            {% comment %} <li class="nav-item flex-shrink-0 flex-xl-shrink-1 z-index-2">
                                 <a class="nav-link" id="Jpills-four-example1-tab" data-toggle="pill" href="#Jpills-four-example1" role="tab" aria-controls="Jpills-four-example1" aria-selected="false">Reviews</a>
-                            </li>
+                            </li> {% endcomment %}
                         </ul>
                     </div>
                     <!-- Tab Content -->
@@ -1158,7 +1158,7 @@
                                     {% endfor %}
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="Jpills-four-example1" role="tabpanel" aria-labelledby="Jpills-four-example1-tab">
+                            {% comment %} <div class="tab-pane fade" id="Jpills-four-example1" role="tabpanel" aria-labelledby="Jpills-four-example1-tab">
                                 <div class="row mb-8">
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -1277,7 +1277,7 @@
                                         </ul>
                                         <!-- End Ratings -->
                                     </div>
-                                    {% comment %} {% if user.is_authenticated %}
+                                    {% if user.is_authenticated %}
                                         <div class="col-md-6">
                                             <h3 class="font-size-18 mb-5">Add a review</h3>
                                             <!-- Form -->
@@ -1344,7 +1344,7 @@
                                             </script>
                                             <!-- End Form -->
                                         </div>
-                                    {% endif %} {% endcomment %}
+                                    {% endif %}
                                 </div>
                                 <!-- Review -->
                                 {% for r in reviews %}
@@ -1414,7 +1414,7 @@
                                 {% endfor %}
 
                                 <!-- End Review -->
-                            </div>
+                            </div> {% endcomment %}
                         </div>
                     </div>
                     <!-- End Tab Content -->
