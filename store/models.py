@@ -1,3 +1,4 @@
+import os
 from django.db import models
 from shortuuid.django_fields import ShortUUIDField
 from django.utils.html import mark_safe
@@ -18,7 +19,15 @@ import shortuuid
 from taggit.managers import TaggableManager
 from vendor.models import Vendor, Coupon
 
-
+def preserve_filename(instance, filename):
+    # Get the file extension
+    ext = filename.split('.')[-1]
+    # Create a slugified title to avoid special characters in file names
+    slug = slugify(instance.title) if instance.title else "product"
+    # Construct the filename with the original name and its extension
+    filename = f"{slug}.{ext}"
+    # Construct the upload path
+    return os.path.join('products/', filename)
 
 
 
@@ -153,7 +162,7 @@ class Category(models.Model):
     meta_description = models.CharField(max_length=10000, blank=True, null=True)
     meta_title = models.SlugField(unique=True, null=True, blank=True)
     tags = models.CharField(blank=True, null=True, max_length=10000)
-    image = models.ImageField(upload_to="category", default="category.png", null=True, blank=True)
+    image = models.ImageField(upload_to=preserve_filename, default="category.png", null=True, blank=True)
     alt = models.CharField(max_length=100, blank=True, null=True)
     featured_product = models.ForeignKey("store.Product", on_delete=models.SET_NULL, blank=True, null=True, related_name="f_c_product")
     bestseller = models.BooleanField(default=False)
@@ -190,8 +199,8 @@ class SubCategory(models.Model):
     hot_deal = models.BooleanField(default=False)
     feature_within_category = models.BooleanField(default=False)
     meta_title = models.SlugField(unique=True, null=True, blank=True)
-    image = models.ImageField(upload_to="sub_category", default="sub_category.png", null=True, blank=True)
-    deal_image = models.ImageField(upload_to="deal", default="deal.png", null=True, blank=True)
+    image = models.ImageField(upload_to=preserve_filename, default="sub_category.png", null=True, blank=True)
+    deal_image = models.ImageField(upload_to=preserve_filename, default="deal.png", null=True, blank=True)
 
     alt = models.CharField(max_length=100, blank=True, null=True)
 
@@ -277,10 +286,10 @@ class Genre(models.Model):
     cid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
     title = models.CharField(max_length=100)
     meta_title = models.SlugField(unique=True, null=True, blank=True)
-    image = models.ImageField(upload_to="genre", default="genre.png", null=True, blank=True)
+    image = models.ImageField(upload_to=preserve_filename default="genre.png", null=True, blank=True)
     alt = models.CharField(max_length=100, blank=True, null=True)
     featured = models.BooleanField(default=False)
-    featured_image = models.ImageField(upload_to="featured genre", default="featured genre.png", null=True, blank=True)
+    featured_image = models.ImageField(upload_to=preserve_filename, default="featured genre.png", null=True, blank=True)
     featured_alt = models.CharField(max_length=100, blank=True, null=True)
 
     active = models.BooleanField(default=True)
@@ -313,7 +322,7 @@ class Brand(models.Model):
     meta_description = models.CharField(max_length=10000, blank=True, null=True)
     tags = models.CharField(blank=True, null=True, max_length=10000)
     meta_title = models.SlugField(unique=True, null=True, blank=True)
-    image = models.ImageField(upload_to="brand", default="brand.png", null=True, blank=True)
+    image = models.ImageField(upload_to=preserve_filename, default="brand.png", null=True, blank=True)
     alt = models.CharField(max_length=100, blank=True, null=True)
     featured = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
@@ -368,7 +377,7 @@ class Choice(models.Model):
     type = models.ForeignKey(Type, on_delete=models.CASCADE, related_name='choices')
     title = models.CharField(max_length=150, blank=True, null=True)
     meta_title = models.SlugField(unique=True, null=True, blank=True)
-    image = models.ImageField(upload_to="choice", default='choice.png', blank=True, null=True)
+    image = models.ImageField(upload_to=preserve_filename, default='choice.png', blank=True, null=True)
     alt = models.CharField(max_length=100, blank=True, null=True)
 
     def save(self, *args, **kwargs):
@@ -400,15 +409,15 @@ class Product(models.Model):
     
     index = models.IntegerField(default=10, blank=True, null=True)
 
-    image = models.ImageField(upload_to=user_directory_path, default="product.png")
-    small_image = models.ImageField(upload_to=user_directory_path, default="product.png")
-    home_featured_image = models.ImageField(upload_to=user_directory_path, default="product.png")
-    footer_image = models.ImageField(upload_to=user_directory_path, default="product.png")
-    footer_banner = models.ImageField(upload_to=user_directory_path, default="product.png")
-    deal_image = models.ImageField(upload_to="deal", default="deal.png", null=True, blank=True)
-    deal_of_the_week_image = models.ImageField(upload_to=user_directory_path, default="product.png")
-    category_feature = models.ImageField(upload_to=user_directory_path, default="product.png")
-    small_box_image = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
+    image = models.ImageField(upload_to=preserve_filename, default="product.png")
+    small_image = models.ImageField(upload_to=preserve_filename, default="product.png")
+    home_featured_image = models.ImageField(upload_to=preserve_filename, default="product.png")
+    footer_image = models.ImageField(upload_to=preserve_filename, default="product.png")
+    footer_banner = models.ImageField(upload_to=preserve_filename, default="product.png")
+    deal_image = models.ImageField(upload_to=preserve_filename, default="deal.png", null=True, blank=True)
+    deal_of_the_week_image = models.ImageField(upload_to=preserve_filename, default="product.png")
+    category_feature = models.ImageField(upload_to=preserve_filename, default="product.png")
+    small_box_image = models.ImageField(upload_to=preserve_filename, blank=True, null=True)
 
     alt = models.CharField(max_length=100, blank=True, null=True)
     outer_description = models.CharField(max_length=200, help_text="Comma-separated list of available features", blank=True)
@@ -448,18 +457,18 @@ class Product(models.Model):
 
     game = models.BooleanField(default=False, null=True, blank=True)
     featured_game = models.BooleanField(default=False, null=True, blank=True)
-    featured_game_banner = models.ImageField(upload_to="featured game banner", default="featured game banner.png", null=True, blank=True)
+    featured_game_banner = models.ImageField(upload_to=preserve_filename, default="featured game banner.png", null=True, blank=True)
     featured_game_banner_alt = models.CharField(max_length=100, blank=True, null=True)
 
     add_to_featured_games_slider = models.BooleanField(default=False, null=True, blank=True)
-    featured_game_slider_banner = models.ImageField(upload_to="featured game slider banner", default="featured game slider banner.png", null=True, blank=True)
-    featured_game_slider_mobile_banner = models.ImageField(upload_to="featured game slider banner", default="featured game slider mobile banner.png", null=True, blank=True)
+    featured_game_slider_banner = models.ImageField(upload_to=preserve_filename, default="featured .png", null=True, blank=True)
+    featured_game_slider_mobile_banner = models.ImageField(upload_to=preserve_filename, default="featured game slider mobile banner.png", null=True, blank=True)
     featured_game_slider_alt = models.CharField(max_length=100, blank=True, null=True)
 
     hero_section_featured = models.BooleanField(default=False, null=True, blank=True)
-    hero_banner = models.ImageField(upload_to="hero", default="hero.png", null=True, blank=True)
-    hero_banner_mobile = models.ImageField(upload_to="hero", default="hero_mobile.png", null=True, blank=True)
-    hero_mini_image = models.ImageField(upload_to="hero", default="hero_mobile.png", null=True, blank=True)
+    hero_banner = models.ImageField(upload_to=preserve_filename, default="hero.png", null=True, blank=True)
+    hero_banner_mobile = models.ImageField(upload_to=preserve_filename, default="hero_mobile.png", null=True, blank=True)
+    hero_mini_image = models.ImageField(upload_to=preserve_filename, default="hero_mobile.png", null=True, blank=True)
     hero_alt = models.CharField(max_length=100, blank=True, null=True)
     hero_mini_text = models.CharField(max_length=50, blank=True, null=True)
     hero_text = models.CharField(max_length=50, blank=True, null=True)
@@ -591,7 +600,7 @@ class Product(models.Model):
 
 class Gallery(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, related_name="product_gallery")
-    image = models.ImageField(upload_to="product_gallery", default="gallery.png")
+    image = models.ImageField(upload_to=preserve_filename, default="gallery.png")
     alt = models.CharField(max_length=100, blank=True, null=True)
     active = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)
@@ -815,8 +824,8 @@ class Review(models.Model):
 
 class CallToActionBanner(models.Model):
     cid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
-    banner = models.ImageField(upload_to="cta banner", default="cta banner.png")
-    banner_mobile = models.ImageField(upload_to="cta banner", default="cta monile banner.png")
+    banner = models.ImageField(upload_to=preserve_filename, default="cta banner.png")
+    banner_mobile = models.ImageField(upload_to=preserve_filename, default="cta monile banner.png")
     banner_alt = models.CharField(max_length=100, blank=True, null=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True, related_name="CTA_Banners")
     subcategory = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, blank=True, null=True, related_name="CTA_Banners")
