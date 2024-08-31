@@ -1,4 +1,5 @@
 import os
+import uuid
 from django.db import models
 from shortuuid.django_fields import ShortUUIDField
 from django.utils.html import mark_safe
@@ -22,12 +23,17 @@ from vendor.models import Vendor, Coupon
 def preserve_filename(instance, filename):
     # Get the file extension
     ext = filename.split('.')[-1]
-    # Create a slugified title to avoid special characters in file names
-    slug = slugify(instance.title) if instance.title else "product"
-    # Construct the filename with the original name and its extension
-    filename = f"{slug}.{ext}"
+    
+    # Generate a unique ID using UUID
+    unique_id = uuid.uuid4().hex
+    
+    # Combine the original file name with the unique ID
+    # Remove special characters and use os.path.splitext to handle extensions
+    name, ext = os.path.splitext(filename)
+    new_filename = f"{name}_{unique_id}{ext}"
+    
     # Construct the upload path
-    return os.path.join('products/', filename)
+    return os.path.join('products/', new_filename)
 
 
 
@@ -286,7 +292,7 @@ class Genre(models.Model):
     cid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
     title = models.CharField(max_length=100)
     meta_title = models.SlugField(unique=True, null=True, blank=True)
-    image = models.ImageField(upload_to=preserve_filename default="genre.png", null=True, blank=True)
+    image = models.ImageField(upload_to=preserve_filename, default="genre.png", null=True, blank=True)
     alt = models.CharField(max_length=100, blank=True, null=True)
     featured = models.BooleanField(default=False)
     featured_image = models.ImageField(upload_to=preserve_filename, default="featured genre.png", null=True, blank=True)
@@ -481,7 +487,7 @@ class Product(models.Model):
 
     hot_deal = models.BooleanField(default=False)
     digital = models.BooleanField(default=False)
-    sku = ShortUUIDField(unique=True, length=5, max_length=10, prefix="SKU", alphabet="1234567890")
+    sku = ShortUUIDField(unique=True, length=5, max_length=20, prefix="SKU", alphabet="1234567890")
     type = models.CharField(choices=PRODUCT_TYPE, max_length=10, default="regular")
     auction_status = models.CharField(choices=AUCTION_STATUS, max_length=10, default="on_going")
     ending_date = models.DateTimeField(auto_now_add=False, null=True, blank=True)
