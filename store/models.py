@@ -509,6 +509,8 @@ class Product(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     release_date = models.DateField(null=True, blank=True)
 
+    staff_ref = models.CharField(max_length=100, blank=True, null=True)
+
     class Meta:
         ordering = ['-date']
         verbose_name_plural = "Products"
@@ -873,3 +875,8 @@ class RecentlyViewed(models.Model):
 
     def __str__(self):
         return f'{self.user.username} viewed {self.product.name} at {self.timestamp}'
+
+class Social(models.Model):
+    link = models.URLField(max_length=200)
+    text = models.CharField(max_length=50)
+    image = models.ImageField(upload_to="social")

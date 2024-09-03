@@ -229,17 +229,24 @@ def category_list(request):
 
 
 def get_fuzzy_matched_products(query, products, threshold=70):
+    # Include SKU in the product data tuple
     product_data = [
-        (product.id, product.title or "", product.brand.title or "", product.category.title or "")
+        (product.id, product.title or "", product.brand.title or "", product.category.title or "", product.sku or "")
         for product in products
     ]
 
     def match_score(product):
         title_score = fuzz.partial_ratio(query, product[1])
         brand_score = fuzz.partial_ratio(query, product[2])
-        return max(title_score, brand_score)
+        category_score = fuzz.partial_ratio(query, product[3])
+        sku_score = fuzz.partial_ratio(query, product[4])  # SKU match score
 
+        # Return the highest score among all fields
+        return max(title_score, brand_score, category_score, sku_score)
+
+    # Filter products with a match score greater than or equal to the threshold
     matched_product_ids = [product[0] for product in product_data if match_score(product) >= threshold]
+    
     return products.filter(id__in=matched_product_ids).distinct()
 
 def get_mapped_query(query):
@@ -300,6 +307,8 @@ def nav_search(request):
         return JsonResponse(context)
 
     return JsonResponse({'success': False, 'queryList': []})
+
+
 def shop(request):
     products = Product.objects.filter(status="published").order_by("index")
     filtered_products = products

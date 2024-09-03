@@ -1,7 +1,7 @@
 from django.contrib import admin
 from store.models import (CallToActionBanner, CartOrderItem, Choice, Genre, Product, Category, CartOrder, Gallery,
                          Brand, ProductFaq, Review, ProductBidders, ProductOffers, SubCategory, Type, Specification,
-                         SpecificationValue, Mapping)
+                         SpecificationValue, Mapping, Social)
 from import_export.admin import ImportExportModelAdmin
 from django.contrib.auth.admin import UserAdmin
 from django.db import models
@@ -164,3 +164,4 @@ admin.site.register(Type, TypeAdmin)
 admin.site.register(Specification, SpecificationAdmin)  # Added
 admin.site.register(SpecificationValue, SpecificationValueAdmin)  # Added
 admin.site.register(Mapping)  # Added
+admin.site.register(Social)  # Added

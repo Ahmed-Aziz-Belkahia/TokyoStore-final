@@ -183,7 +183,11 @@ document.addEventListener('DOMContentLoaded', function () {
                                 });
                                 searchResult.appendChild(div);
                             });
+                            searchResult.style.width = "90.7%";
+                            searchResult.style.borderRadius = "0px 0px 25px 25px";
                             searchResult.style.display = "block";
+                            
+                            
                         } else {
                             searchResult.style.display = "none";
                         }
@@ -248,6 +252,38 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         return cookieValue;
     }
+
+
+
+    const nlinks = document.querySelectorAll('.n-l'); // Select all elements with the class 'n-l'
+    const categoryImages = document.querySelectorAll('.c-l'); // Select all elements with the class 'c-l'
+    
+    nlinks.forEach((link) => {
+        link.addEventListener('mouseenter', () => {
+            const subcategoryImage = link.getAttribute('data-image'); // Get the value of the data-image attribute
+            const categoryId = link.getAttribute('data-category-id'); // Get the data-category-id from the link
+    
+            // Find the corresponding category image element with the matching data-category-id
+            const matchingCategoryImage = Array.from(categoryImages).find(image => 
+                image.getAttribute('data-category-id') === categoryId
+            );
+    
+            // Change the src of the matching category image to the subcategory image
+            if (matchingCategoryImage) {
+                matchingCategoryImage.src = subcategoryImage;
+            }
+        });
+    });
+
+
+
+
+
+
+
+
+
+    
 });
 
 

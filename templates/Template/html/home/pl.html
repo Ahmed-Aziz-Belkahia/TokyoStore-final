@@ -1,0 +1,86 @@
+<li class="col-6 col-md-4 col-wd-3 product-item">
+    <div class="product-item__outer h-100">
+        <div class="product-item__inner px-xl-4 p-3">
+            <div class="product-item__body pb-xl-2">
+                <div class="mb-2"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="font-size-12 text-gray-5">{{ product.category }}</a></div>
+                <h5 class="mb-1 product-item__title"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{ product.title }}</a></h5>
+                <div class="mb-2">
+                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="d-block text-center"><img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.alt }}"></a>
+                </div>
+                <div class="flex-center-between mb-1">
+                    <div class="prodcut-price">
+                        <div class="text-gray-100">TND {{ product.price }}</div>
+                    </div>
+                    <input type="hidden" class="product-tax-fee-{{ product.id }}" value="{{ new_rate_|floatformat:2 }}" />
+                <input type="hidden" class="product-processing-fee-{{ product.id }}" value="{{ service_fee_rate_ }}" />
+                <input type="hidden" class="product-vendor-{{ product.id }}" value="{{ product.vendor.id }}" />
+                <input type="hidden" class="product-vendor-name-{{ product.id }}" value="{{ product.vendor.shop_name }}" />
+                <input type="hidden" class="product-brand-{{ product.id }}" value="{{ product.brand }}" />
+
+                <input type="hidden" class="product-types_choices-{{ product.id }}" value="here the json of selected choices" />
+
+
+
+                <input type="hidden" class="product-gz_coins-{{ product.id }}" value="{{ product.gz_coins }}" />
+                <input type="hidden" class="product-shipping_amount-{{ product.id }}" value="{{ product.shipping_amount }}" />
+                <input type="hidden" class="product-quantity-{{ product.id }}" value="1" id="product-quantity" class="w-25 mb-10 product-quantity-{{ product.id }}" />
+                <input type="hidden" class="product-price-{{ product.id }}" value="{{ product.price }}" />
+                <input type="hidden" class="product-pid-{{ product.id }}" value="{{ product.pid }}" />
+                <input type="hidden" class="product-image-{{ product.id }}" value="{{ product.image.url }}" />
+                <input type="hidden" class="product-id-{{ product.id }}" value="{{ product.id }}" />
+                <input type="hidden" class="product-title-{{ product.id }}" value="{{ product.title }}" />
+                <input type="hidden" class="product-meta_title-{{ product.id }}" value="{{ product.meta_title }}" />
+                <input type="hidden" class="product-meta-title-{{ product.id }}" value="{{ product.meta_title }}" />
+
+                <input type="hidden" class="product-is_digital-{{ product.id }}" value="{{ product.digital }}" />
+
+                <input type="hidden" class="product-slug-{{ product.id }}" value="{{ product.slug }}" />                      
+                <input type="hidden" class="product-vendor-slug-{{ product.id }}" value="{{ product.vendor.slug }}" />
+
+                <input type="hidden" class="product-is_digital-{{ product.id }}" value="{{ product.digital }}" />
+
+                <input type="hidden" class="product-stock-qty-{{ product.id }}" value="{{ product.stock_qty }}" />
+                <input type="hidden" class="product-in-stock-{{ product.id }}" value="{{ product.in_stock }}" />
+
+
+                {% if product.in_stock == True and product.stock_qty != 0 %}
+                    {% if product.type == "auction" %}
+                        <div class="shop_item_cart_bftn d-grid mt-2">
+                            <a class="btn purple-btn add-to-cart-btn">Rejoindre la mise aux enchères maintenant</a>
+                        </div>
+
+                        
+                    {% endif %}
+    
+                    {% if product.type == "offer" %}
+                        <div class="shop_item_cart_bftn d-grid mt-2">
+                            <a class="btn purple-btn add-to-cart-btn">Rejoindre la mise aux enchères maintenant</a>
+                        </div>
+                    {% endif %}
+    
+                    {% if product.type == "regular" %}
+                        <div class="shop_item_cart_bftn d-grid mt-2">
+                            <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}>add to cart</a>
+                        </div>
+                    {% endif %}  
+                    {% if product.type == "pre_order" %}
+                        <div class="shop_item_cart_bftn d-grid mt-2">
+                            <a class="btn purple-btn add-to-cart-btn">Rejoindre la mise aux enchères maintenant</a>
+                        </div>
+                    {% endif %}  
+                {% else %}
+                    <div class="shop_item_cart_bftn d-grid mt-2">
+                        <a class="btn purple-btn add-to-cart-btn">add to cart</a>
+                    </div>
+                {% endif %} 
+                </div>
+            </div>
+            <div class="product-item__footer">
+                <div class="border-top pt-2 flex-center-between flex-wrap">
+                    {% comment %} <a href="../shop/compare.html" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a> {% endcomment %}
+                    <a href="{% url "core:buyer-wishlist" %}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

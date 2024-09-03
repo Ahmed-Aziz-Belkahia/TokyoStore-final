@@ -26,7 +26,7 @@
         <link rel="stylesheet" href="{% static "assets/vendor/fancybox/jquery.fancybox.css" %}">
         <link rel="stylesheet" href="{% static "assets/vendor/slick-carousel/slick/slick.css" %}">
         <link rel="stylesheet" href="{% static "assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" %}">
-
+        <script src="https://kit.fontawesome.com/f45f6ff45f.js" crossorigin="anonymous"></script>
         <!-- CSS Electro Template -->
         <link rel="stylesheet" href="{% static "assets/css/theme.css" %}">
     </head>
@@ -500,7 +500,7 @@
                                                                         <!-- Nav Item - Mega Menu -->
                                                                         <div class="hs-mega-menu vmm-tfw u-header__sub-menu" aria-labelledby="basicMegaMenu">
                                                                             <div class="vmm-bg">
-                                                                                <img class="img-fluid" src="{{category.image.url}}" alt="Image Description">
+                                                                                <img class="img-fluid c-l" data-category-id={{category.id}} src="{{category.image.url}}" alt="Image Description">
                                                                             </div>
                                                                             <div class="row u-header__mega-menu-wrapper">
                                                                                 <div class="col mb-3 mb-sm-0">
@@ -508,7 +508,7 @@
                                                                                     <ul class="u-header__sub-menu-nav-group mb-3">
                                                                                         <li><a class="nav-link u-header__sub-menu-nav-link" href="{% url "store:category-shop" meta_title=category.meta_title %}">All {{category}}</a></li>
                                                                                         {% for subcategory in category.subcategories.all %}
-                                                                                            <li><a class="nav-link u-header__sub-menu-nav-link" href="{% url "store:category-shop" meta_title=category.meta_title %}?subcategories={{subcategory.meta_title}}">{{subcategory.title}}</a></li>
+                                                                                            <li class="n-l" data-category-id={{category.id}} data-image={% if subcategory.image %}{{subcategory.image.url}}{% else %}{{category.image.url}}{% endif %}><a class="nav-link u-header__sub-menu-nav-link" href="{% url "store:category-shop" meta_title=category.meta_title %}?subcategories={{subcategory.meta_title}}">{{subcategory.title}}</a></li>
                                                                                         {% endfor %}
                                                                                         {% comment %} <li>
                                                                                             <a class="nav-link u-header__sub-menu-nav-link u-nav-divider border-top pt-2 flex-column align-items-start" href="#">
@@ -615,7 +615,47 @@
             </div>
         </header>
         <!-- ========== END HEADER ========== -->
+         <style>
+            
+            .sm {
+                display: flex;
+                width: 234px;
+                position: absolute;
+                z-index: 400;
+                top: 50%;
+                left: 0;
+                flex-flow: column;
+                gap: 1rem;
+            }
 
+
+            .sm-l {
+                background-color: white;
+                border-radius: 0px 15px 15px 0px;
+                height: 31px;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                padding: 0 1rem;
+                width: 44px;
+                gap: 1rem;
+                transition: 0.3s;
+                cursor: pointer;
+            }
+
+            .sm-l:hover{
+                width: 200px
+            }
+
+         </style>
+        <div class="sm">
+            {% for social in socials %}
+                <a href="{{social.link}}" class="sm-l">
+                    <div class="text">{{social.text}}</div>
+                    <div class="logo"><img style="width: 30px" src="{{social.image.url}}" alt="{{social.text}}"></div>
+                </a>
+            {% endfor %}
+        </div>
         <!-- ========== MAIN CONTENT ========== -->
         <main id="content" role="main">
             <!-- Slider Section -->
@@ -1529,100 +1569,7 @@
                                     <div class="js-slide">
                                         <ul class="row list-unstyled products-group no-gutters mb-0 overflow-visible">
                                             {% for product in chunk %}
-                                            <li class="col-md-4 product-item product-item__card pb-2 mb-2 pb-md-0 mb-md-0 border-bottom border-md-bottom-0">
-                                                <div class="product-item__outer h-100">
-                                                    <div class="product-item__inner p-md-3 row no-gutters">
-                                                        <div class="col col-lg-auto col-xl-5 col-wd-auto product-media-left">
-                                                            <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="max-width-150 d-block">
-                                                                <img class="img-fluid" src="{{product.image.url}}" alt="Image Description">
-                                                            </a>
-                                                        </div>
-                                                        <div class="col col-xl-7 col-wd product-item__body pl-2 pl-lg-3 pl-xl-0 pl-wd-3 mr-wd-1">
-                                                            <div class="mb-4 mb-xl-2 mb-wd-4">
-                                                                <div class="mb-2">
-                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="font-size-12 text-gray-5">{{ product.category }}</a>
-                                                                </div>
-                                                                <h5 class="product-item__title">
-                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{ product.title }}</a>
-                                                                </h5>
-                                                            </div>
-                                                            <div class="flex-center-between mb-3">
-                                                                <div class="prodcut-price">
-                                                                    <div class="text-gray-100">TND {{ product.price }}</div>
-                                                                </div>
-                                                                <input type="hidden" class="product-tax-fee-{{ product.id }}" value="{{ new_rate_|floatformat:2 }}" />
-                                                            <input type="hidden" class="product-processing-fee-{{ product.id }}" value="{{ service_fee_rate_ }}" />
-                                                            <input type="hidden" class="product-vendor-{{ product.id }}" value="{{ product.vendor.id }}" />
-                                                            <input type="hidden" class="product-vendor-name-{{ product.id }}" value="{{ product.vendor.shop_name }}" />
-                                                            <input type="hidden" class="product-brand-{{ product.id }}" value="{{ product.brand }}" />
-
-                                                            <input type="hidden" class="product-types_choices-{{ product.id }}" value="here the json of selected choices" />
-
-
-
-                                                            <input type="hidden" class="product-gz_coins-{{ product.id }}" value="{{ product.gz_coins }}" />
-                                                            <input type="hidden" class="product-shipping_amount-{{ product.id }}" value="{{ product.shipping_amount }}" />
-                                                            <input type="hidden" class="product-quantity-{{ product.id }}" value="1" id="product-quantity" class="w-25 mb-10 product-quantity-{{ product.id }}" />
-                                                            <input type="hidden" class="product-price-{{ product.id }}" value="{{ product.price }}" />
-                                                            <input type="hidden" class="product-pid-{{ product.id }}" value="{{ product.pid }}" />
-                                                            <input type="hidden" class="product-image-{{ product.id }}" value="{{ product.image.url }}" />
-                                                            <input type="hidden" class="product-id-{{ product.id }}" value="{{ product.id }}" />
-                                                            <input type="hidden" class="product-title-{{ product.id }}" value="{{ product.title }}" />
-                                                            <input type="hidden" class="product-meta_title-{{ product.id }}" value="{{ product.meta_title }}" />
-                                                            <input type="hidden" class="product-meta-title-{{ product.id }}" value="{{ product.meta_title }}" />
-
-                                                            <input type="hidden" class="product-is_digital-{{ product.id }}" value="{{ product.digital }}" />
-
-                                                            <input type="hidden" class="product-slug-{{ product.id }}" value="{{ product.slug }}" />                      
-                                                            <input type="hidden" class="product-vendor-slug-{{ product.id }}" value="{{ product.vendor.slug }}" />
-
-                                                            <input type="hidden" class="product-is_digital-{{ product.id }}" value="{{ product.digital }}" />
-
-                                                            <input type="hidden" class="product-stock-qty-{{ product.id }}" value="{{ product.stock_qty }}" />
-                                                            <input type="hidden" class="product-in-stock-{{ product.id }}" value="{{ product.in_stock }}" />
-
-
-                                                            {% if product.in_stock == True and product.stock_qty != 0 %}
-                                                                {% if product.type == "auction" %}
-                                                                    <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn">Rejoindre la mise aux enchères maintenant</a>
-                                                                    </div>
-
-                                                                    
-                                                                {% endif %}
-                                                
-                                                                {% if product.type == "offer" %}
-                                                                    <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn">Rejoindre la mise aux enchères maintenant</a>
-                                                                    </div>
-                                                                {% endif %}
-                                                
-                                                                {% if product.type == "regular" %}
-                                                                    <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}>add to cart</a>
-                                                                    </div>
-                                                                {% endif %}  
-                                                                {% if product.type == "pre_order" %}
-                                                                    <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn">Rejoindre la mise aux enchères maintenant</a>
-                                                                    </div>
-                                                                {% endif %}  
-                                                            {% else %}
-                                                                <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                    <a class="btn purple-btn add-to-cart-btn">add to cart</a>
-                                                                </div>
-                                                            {% endif %} 
-                                                            </div>
-                                                            <div class="product-item__footer">
-                                                                <div class="border-top pt-2 flex-center-between flex-wrap">
-                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
-                                                                    <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                            {% include "Template\html\home\pl.html" %}
                                             {% endfor %}
                                         </ul>
                                     </div>
@@ -1636,41 +1583,7 @@
                                         <div class="js-slide">
                                             <ul class="row list-unstyled products-group no-gutters mb-0 overflow-visible">
                                                 {% for product in chunk %}
-                                                <li class="col-md-4 product-item product-item__card pb-2 mb-2 pb-md-0 mb-md-0 border-bottom border-md-bottom-0">
-                                                    <div class="product-item__outer h-100">
-                                                        <div class="product-item__inner p-md-3 row no-gutters">
-                                                            <div class="col col-lg-auto col-xl-5 col-wd-auto product-media-left">
-                                                                <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="max-width-150 d-block">
-                                                                    <img class="img-fluid" src="{{product.image.url}}" alt="Image Description">
-                                                                </a>
-                                                            </div>
-                                                            <div class="col col-xl-7 col-wd product-item__body pl-2 pl-lg-3 pl-xl-0 pl-wd-3 mr-wd-1">
-                                                                <div class="mb-4 mb-xl-2 mb-wd-4">
-                                                                    <div class="mb-2">
-                                                                        <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="font-size-12 text-gray-5">{{ product.category }}</a>
-                                                                    </div>
-                                                                    <h5 class="product-item__title">
-                                                                        <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{ product.title }}</a>
-                                                                    </h5>
-                                                                </div>
-                                                                <div class="flex-center-between mb-3">
-                                                                    <div class="prodcut-price">
-                                                                        <div class="text-gray-100">TND {{ product.price }}</div>
-                                                                    </div>
-                                                                    <div class="d-none d-xl-block prodcut-add-cart">
-                                                                        <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart"></i></a>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-item__footer">
-                                                                    <div class="border-top pt-2 flex-center-between flex-wrap">
-                                                                        <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
-                                                                        <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
+                                                {% include "Template\html\home\pl.html" %}
                                                 {% endfor %}
                                             </ul>
                                         </div>
@@ -1708,92 +1621,9 @@
                                     <div class="Ctab-panel col" id="cpanel1_{{ forloop.counter }}" role="tabpanel" aria-labelledby="ctab1_{{ forloop.counter }}">
                                         <ul class="row list-unstyled products-group no-gutters">
                                             {% for product in category|get_top_selling_from_category|get:8 %}
-                                            <li class="col-6 col-md-4 col-wd-3 product-item">
-                                                <div class="product-item__outer h-100">
-                                                    <div class="product-item__inner px-xl-4 p-3">
-                                                        <div class="product-item__body pb-xl-2">
-                                                            <div class="mb-2"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="font-size-12 text-gray-5">{{ product.category }}</a></div>
-                                                            <h5 class="mb-1 product-item__title"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{ product.title }}</a></h5>
-                                                            <div class="mb-2">
-                                                                <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="d-block text-center"><img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.alt }}"></a>
-                                                            </div>
-                                                            <div class="flex-center-between mb-1">
-                                                                <div class="prodcut-price">
-                                                                    <div class="text-gray-100">TND {{ product.price }}</div>
-                                                                </div>
-                                                                <input type="hidden" class="product-tax-fee-{{ product.id }}" value="{{ new_rate_|floatformat:2 }}" />
-                                                            <input type="hidden" class="product-processing-fee-{{ product.id }}" value="{{ service_fee_rate_ }}" />
-                                                            <input type="hidden" class="product-vendor-{{ product.id }}" value="{{ product.vendor.id }}" />
-                                                            <input type="hidden" class="product-vendor-name-{{ product.id }}" value="{{ product.vendor.shop_name }}" />
-                                                            <input type="hidden" class="product-brand-{{ product.id }}" value="{{ product.brand }}" />
+                                            {% include "Template\html\home\pl.html" %}
 
-                                                            <input type="hidden" class="product-types_choices-{{ product.id }}" value="here the json of selected choices" />
-
-
-
-                                                            <input type="hidden" class="product-gz_coins-{{ product.id }}" value="{{ product.gz_coins }}" />
-                                                            <input type="hidden" class="product-shipping_amount-{{ product.id }}" value="{{ product.shipping_amount }}" />
-                                                            <input type="hidden" class="product-quantity-{{ product.id }}" value="1" id="product-quantity" class="w-25 mb-10 product-quantity-{{ product.id }}" />
-                                                            <input type="hidden" class="product-price-{{ product.id }}" value="{{ product.price }}" />
-                                                            <input type="hidden" class="product-pid-{{ product.id }}" value="{{ product.pid }}" />
-                                                            <input type="hidden" class="product-image-{{ product.id }}" value="{{ product.image.url }}" />
-                                                            <input type="hidden" class="product-id-{{ product.id }}" value="{{ product.id }}" />
-                                                            <input type="hidden" class="product-title-{{ product.id }}" value="{{ product.title }}" />
-                                                            <input type="hidden" class="product-meta_title-{{ product.id }}" value="{{ product.meta_title }}" />
-                                                            <input type="hidden" class="product-meta-title-{{ product.id }}" value="{{ product.meta_title }}" />
-
-                                                            <input type="hidden" class="product-is_digital-{{ product.id }}" value="{{ product.digital }}" />
-
-                                                            <input type="hidden" class="product-slug-{{ product.id }}" value="{{ product.slug }}" />                      
-                                                            <input type="hidden" class="product-vendor-slug-{{ product.id }}" value="{{ product.vendor.slug }}" />
-
-                                                            <input type="hidden" class="product-is_digital-{{ product.id }}" value="{{ product.digital }}" />
-
-                                                            <input type="hidden" class="product-stock-qty-{{ product.id }}" value="{{ product.stock_qty }}" />
-                                                            <input type="hidden" class="product-in-stock-{{ product.id }}" value="{{ product.in_stock }}" />
-
-
-                                                            {% if product.in_stock == True and product.stock_qty != 0 %}
-                                                                {% if product.type == "auction" %}
-                                                                    <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn">Rejoindre la mise aux enchères maintenant</a>
-                                                                    </div>
-
-                                                                    
-                                                                {% endif %}
-                                                
-                                                                {% if product.type == "offer" %}
-                                                                    <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn">Rejoindre la mise aux enchères maintenant</a>
-                                                                    </div>
-                                                                {% endif %}
-                                                
-                                                                {% if product.type == "regular" %}
-                                                                    <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}>add to cart</a>
-                                                                    </div>
-                                                                {% endif %}  
-                                                                {% if product.type == "pre_order" %}
-                                                                    <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn">Rejoindre la mise aux enchères maintenant</a>
-                                                                    </div>
-                                                                {% endif %}  
-                                                            {% else %}
-                                                                <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                    <a class="btn purple-btn add-to-cart-btn">add to cart</a>
-                                                                </div>
-                                                            {% endif %} 
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-item__footer">
-                                                            <div class="border-top pt-2 flex-center-between flex-wrap">
-                                                                {% comment %} <a href="../shop/compare.html" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a> {% endcomment %}
-                                                                <a href="{% url "core:buyer-wishlist" %}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                            
                                             {% endfor %}
                                         </ul>
                                     </div>
@@ -1801,92 +1631,7 @@
                                     <div class="Ctab-panel col" id="cpanel{{ forloop.counter|add:2 }}_{{ forloop.parentloop.counter }}" role="tabpanel" aria-labelledby="ctab{{ forloop.counter|add:2 }}_{{ forloop.parentloop.counter }}" hidden>
                                         <ul class="row list-unstyled products-group no-gutters">
                                             {% for product in subcategory|get_subcategories_products|get:8 %}
-                                            <li class="col-6 col-md-4 col-wd-3 product-item">
-                                                <div class="product-item__outer h-100">
-                                                    <div class="product-item__inner px-xl-4 p-3">
-                                                        <div class="product-item__body pb-xl-2">
-                                                            <div class="mb-2"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="font-size-12 text-gray-5">{{ product.category }}</a></div>
-                                                            <h5 class="mb-1 product-item__title"><a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="text-blue font-weight-bold">{{ product.title }}</a></h5>
-                                                            <div class="mb-2">
-                                                                <a href="{% url "store:product-detail" meta_title=product.meta_title%}" class="d-block text-center"><img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.alt }}"></a>
-                                                            </div>
-                                                            <div class="flex-center-between mb-1">
-                                                                <div class="prodcut-price">
-                                                                    <div class="text-gray-100">TND {{ product.price }}</div>
-                                                                </div>
-                                                                <input type="hidden" class="product-tax-fee-{{ product.id }}" value="{{ new_rate_|floatformat:2 }}" />
-                                                            <input type="hidden" class="product-processing-fee-{{ product.id }}" value="{{ service_fee_rate_ }}" />
-                                                            <input type="hidden" class="product-vendor-{{ product.id }}" value="{{ product.vendor.id }}" />
-                                                            <input type="hidden" class="product-vendor-name-{{ product.id }}" value="{{ product.vendor.shop_name }}" />
-                                                            <input type="hidden" class="product-brand-{{ product.id }}" value="{{ product.brand }}" />
-
-                                                            <input type="hidden" class="product-types_choices-{{ product.id }}" value="here the json of selected choices" />
-
-
-
-                                                            <input type="hidden" class="product-gz_coins-{{ product.id }}" value="{{ product.gz_coins }}" />
-                                                            <input type="hidden" class="product-shipping_amount-{{ product.id }}" value="{{ product.shipping_amount }}" />
-                                                            <input type="hidden" class="product-quantity-{{ product.id }}" value="1" id="product-quantity" class="w-25 mb-10 product-quantity-{{ product.id }}" />
-                                                            <input type="hidden" class="product-price-{{ product.id }}" value="{{ product.price }}" />
-                                                            <input type="hidden" class="product-pid-{{ product.id }}" value="{{ product.pid }}" />
-                                                            <input type="hidden" class="product-image-{{ product.id }}" value="{{ product.image.url }}" />
-                                                            <input type="hidden" class="product-id-{{ product.id }}" value="{{ product.id }}" />
-                                                            <input type="hidden" class="product-title-{{ product.id }}" value="{{ product.title }}" />
-                                                            <input type="hidden" class="product-meta_title-{{ product.id }}" value="{{ product.meta_title }}" />
-                                                            <input type="hidden" class="product-meta-title-{{ product.id }}" value="{{ product.meta_title }}" />
-
-                                                            <input type="hidden" class="product-is_digital-{{ product.id }}" value="{{ product.digital }}" />
-
-                                                            <input type="hidden" class="product-slug-{{ product.id }}" value="{{ product.slug }}" />                      
-                                                            <input type="hidden" class="product-vendor-slug-{{ product.id }}" value="{{ product.vendor.slug }}" />
-
-                                                            <input type="hidden" class="product-is_digital-{{ product.id }}" value="{{ product.digital }}" />
-
-                                                            <input type="hidden" class="product-stock-qty-{{ product.id }}" value="{{ product.stock_qty }}" />
-                                                            <input type="hidden" class="product-in-stock-{{ product.id }}" value="{{ product.in_stock }}" />
-
-
-                                                            {% if product.in_stock == True and product.stock_qty != 0 %}
-                                                                {% if product.type == "auction" %}
-                                                                    <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn">Rejoindre la mise aux enchères maintenant</a>
-                                                                    </div>
-
-                                                                    
-                                                                {% endif %}
-                                                
-                                                                {% if product.type == "offer" %}
-                                                                    <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn">Rejoindre la mise aux enchères maintenant</a>
-                                                                    </div>
-                                                                {% endif %}
-                                                
-                                                                {% if product.type == "regular" %}
-                                                                    <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}>add to cart</a>
-                                                                    </div>
-                                                                {% endif %}  
-                                                                {% if product.type == "pre_order" %}
-                                                                    <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn">Rejoindre la mise aux enchères maintenant</a>
-                                                                    </div>
-                                                                {% endif %}  
-                                                            {% else %}
-                                                                <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                    <a class="btn purple-btn add-to-cart-btn">add to cart</a>
-                                                                </div>
-                                                            {% endif %} 
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-item__footer">
-                                                            <div class="border-top pt-2 flex-center-between flex-wrap">
-                                                                {% comment %} <a href="../shop/compare.html" class="text-gray-6 font-size-13"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a> {% endcomment %}
-                                                                <a href="{% url "core:buyer-wishlist" %}" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                            {% include "Template\html\home\pl.html" %}
                                             {% endfor %}
                                         </ul>
                                     </div>

@@ -191,7 +191,6 @@ def default(request):
     product_plus_shipping_session = 0
     service_fee_amount = 0
     total_session = 0
-
     if 'cart_data_obj' in request.session:
         for p_id, item in request.session['cart_data_obj'].items():
             cart_total_amount += int(item['qty']) * float(item['price'])
@@ -214,6 +213,8 @@ def default(request):
             # print("product_plus_shipping_session ==================", product_plus_shipping_session)
             # print("cart_total_amount ==================", cart_total_amount)
             # print("tax_amount_ ==================", tax_amount_)
+
+    socials = models.Social.objects.all()
 
     return {
         "footer_top_products": footer_top_products,
@@ -249,4 +250,5 @@ def default(request):
         "featured_hot_deals": featured_hot_deals,
         "payment_method": payment_method,
         "categories": categories,
+        "socials": socials,
     }

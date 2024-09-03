@@ -1,0 +1,8 @@
+<ol class="breadcrumb mb-3 flex-nowrap flex-xl-wrap overflow-auto overflow-xl-visble">
+    <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1"><a href="{% url "store:shop" %}">Shop</a></li>
+    <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1"><a href="{% url "store:category-shop" meta_title=product.category.meta_title %}">{{product.category.title}}</a></li>
+    {% for s in product.subcategory.get_all_parent_subcategories %}
+    <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1"><a href="{% url "store:category-shop" meta_title=product.category.meta_title %}?subcategories=s.meta_title">{{s.title}}</a></li>
+    {% endfor %}
+    <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1 active" aria-current="page">{{product.title}}</li>
+</ol>
