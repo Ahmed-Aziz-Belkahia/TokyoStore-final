@@ -327,7 +327,35 @@
                                     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
                                     <script>
                                         $(".add-to-cart-btn").on("click", function(){
-        
+                                            
+                                            var selectedChoices = {};
+                                            {% for type in product.product_types.all %}
+                                                // Get the parent div using the class
+                                                const parentDiv = document.querySelector('.product-type-{{ type.id }}');
+                                                
+                                                if (parentDiv) {
+                                                    // Find the select element within the parent div
+                                                    const selectElement = parentDiv.querySelector('select');
+                                                    
+                                                    if (selectElement) {
+                                                        // Update the selectedChoices object with the current selected value
+                                                        selectedChoices["{{ type.title }}"] = selectElement.value;
+                                    
+                                                        // Add event listener to update selectedChoices when the selection changes
+                                                        selectElement.addEventListener('change', function() {
+                                                            selectedChoices["{{ type.title }}"] = this.value;
+                                                            console.log(`Updated ${'{{ type.title }}'} selection:`, selectedChoices["{{ type.title }}"]);
+                                                        });
+                                                    }
+                                                }
+                                            {% endfor %}
+
+                                            console.log(selectedChoices);
+                                            // Update value of hidden input field
+                                            var hiddenInput = document.querySelector('.product-types_choices-{{ product.id }}');
+                                            console.log(JSON.stringify(selectedChoices))
+                                            hiddenInput.value = JSON.stringify(selectedChoices);
+
                                             let this_val = $(this)
                                             let index = this_val.attr("data-index")
                                             
@@ -422,7 +450,7 @@
                                     
                                                         console.log("Added Product to Cart!");
                                                         $(".cart-items-count").text(response.totalcartitems + " Items")
-                                                        window.location.href="/my-cart"
+                                                        {% comment %} window.location.href="/my-cart" {% endcomment %}
                                             
                                                     }
                                                 })
