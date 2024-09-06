@@ -69,7 +69,7 @@
                                 
                                 {% for g in product_images %}
                                     <div class="js-slide">
-                                        <img class="img-fluid" src="{{g.image.url}}" alt="Image Description">
+                                        <img class="img-fluid" data-image="{{g.image.url}}" data-index={{ forloop.counter }} src="{{g.image.url}}" alt="Image Description">
                                     </div>
                                 {% endfor %}
                             </div>
@@ -82,7 +82,7 @@
 
                                 {% for g in product_images %}
                                     <div class="js-slide" style="cursor: pointer;">
-                                        <img class="img-fluid" src="{{g.image.url}}" alt="{{g.alt}}">
+                                        <img data-image="{{g.image.url}}" data-index={{ forloop.counter }} class="img-fluid" src="{{g.image.url}}" alt="{{g.alt}}">
                                     </div>
                                 {% endfor %}
 
@@ -205,6 +205,27 @@
                                     </div>
                                 </div>
                                 {% endif %}
+
+
+                                {% for type in product.product_types.all %}
+                                    <div class="border-top border-bottom py-3 mb-4">
+                                        <div class="d-flex align-items-center">
+                                            <h6 class="font-size-14 mb-0">{{ type.title }}</h6>
+                                            <select class="product-type-{{ type.id }} js-select selectpicker dropdown-select ml-3"
+                                                    data-style="btn-sm bg-white font-weight-normal py-2 border">
+                                                {% for choice in type.choices.all %}
+                                                    <option data-image="{% if choice.image %}{{ choice.image.image.url }}{% endif %}" value="{{ choice.title }}" {% if forloop.first %} selected {% endif %}>
+                                                        {{ choice.title }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            
+                                
+
+                                
                                 <div class="d-md-flex align-items-end mb-3">
                                     <div class="max-width-150 mb-4 mb-md-0">
                                         <h6 class="font-size-14">Quantity</h6>
@@ -1343,6 +1364,49 @@
 
                 // initialization of select picker
                 $.HSCore.components.HSSelectPicker.init('.js-select');
+            });
+        </script>
+        <script>
+            function logImage(selectElement) {
+                // Get the selected option's data-image attribute
+                const selectedOption = selectElement.options[selectElement.selectedIndex];
+                const imageUrl = selectedOption.getAttribute('data-image');
+                
+                // Log the image URL to the console
+                if (imageUrl) {
+                
+                    const thumbnails = document.querySelectorAll('#sliderSyncingThumb .js-slide img');
+                    for (const thumbnail of thumbnails) {
+                        const index = thumbnail.getAttribute('data-index');
+        
+                        if (thumbnail.getAttribute('data-image') == imageUrl) {
+                            const slickCarousel = $('.u-slick');
+                            
+                            if (slickCarousel.length && slickCarousel.hasClass('slick-initialized')) {
+                                console.log(index, 'Navigating to this index');
+                                slickCarousel.slick('slickGoTo', parseInt(index));
+                            } else {
+                                console.log('Slick carousel not initialized or not found');
+                            }
+                            break;
+                        }
+                    }
+                } else {
+                    console.log('No image for selected option');
+                }
+            }
+            
+            // Log the default selected images on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                const selectElements = document.querySelectorAll('select.js-select');
+                selectElements.forEach(function(selectElement) {
+                    logImage(selectElement); // Log the default selected option's image for each dropdown
+        
+                    // Add event listener to handle changes
+                    selectElement.addEventListener('change', function() {
+                        logImage(selectElement); // Log the selected option's image whenever the selection changes
+                    });
+                });
             });
         </script>
     </body>

@@ -36,6 +36,22 @@ def preserve_filename(instance, filename):
     return os.path.join('products/', new_filename)
 
 
+def preserve_filename(instance, filename):
+    # Get the file extension
+    ext = filename.split('.')[-1]
+    
+    # Generate a unique ID using UUID
+    unique_id = uuid.uuid4().hex
+    
+    # Combine the original file name with the unique ID
+    # Remove special characters and use os.path.splitext to handle extensions
+    name, ext = os.path.splitext(filename)
+    new_filename = f"{name}_{unique_id}{ext}"
+    
+    # Construct the upload path
+    return os.path.join('products/', new_filename)
+
+
 
 STATUS_CHOICE = (
     ("processing", "Processing"),
@@ -379,21 +395,7 @@ class Type(models.Model):
         super(Type, self).save(*args, **kwargs) 
 
 
-class Choice(models.Model):
-    type = models.ForeignKey(Type, on_delete=models.CASCADE, related_name='choices')
-    title = models.CharField(max_length=150, blank=True, null=True)
-    meta_title = models.SlugField(unique=True, null=True, blank=True)
-    image = models.ImageField(upload_to=preserve_filename, default='choice.png', blank=True, null=True)
-    alt = models.CharField(max_length=100, blank=True, null=True)
 
-    def save(self, *args, **kwargs):
-
-        if self.meta_title == "" or self.meta_title == None:
-            uuid_key = shortuuid.uuid()
-            uniqueid = uuid_key[:4]
-            self.meta_title = slugify(self.title) + "-" + str(uniqueid.lower())
-            
-        super(Choice, self).save(*args, **kwargs) 
 
 class Product(models.Model):
     pid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
@@ -404,7 +406,7 @@ class Product(models.Model):
     subcategory = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name="sub_category")
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, blank=True, related_name="product_brand")
 
-    #types = models.ManyToManyField(Type, blank=True, related_name='products')
+    #types = models.ManyToManyField (Type, blank=True, related_name='products')
 
     home_featured = models.BooleanField(default=False)
     footer_feature = models.BooleanField(default=False)
@@ -619,8 +621,24 @@ class Gallery(models.Model):
         verbose_name_plural = "Product Images"
 
     def __str__(self):
-        return "Image"
-        
+        return f"{self.product.id} - {self.alt} - {self.id}"
+
+class Choice(models.Model):
+    type = models.ForeignKey(Type, on_delete=models.CASCADE, related_name='choices')
+    title = models.CharField(max_length=150, blank=True, null=True)
+    meta_title = models.SlugField(unique=True, null=True, blank=True)
+    image = models.ForeignKey(Gallery, on_delete=models.CASCADE, blank=True, null=True)
+    alt = models.CharField(max_length=100, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+
+        if self.meta_title == "" or self.meta_title == None:
+            uuid_key = shortuuid.uuid()
+            uniqueid = uuid_key[:4]
+            self.meta_title = slugify(self.title) + "-" + str(uniqueid.lower())
+            
+        super(Choice, self).save(*args, **kwargs) 
+
 class ProductBidders(models.Model):
     bid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -850,11 +868,17 @@ class Specification(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="specifications", null=True, blank=True)
     title = models.CharField(max_length=100, null=True, blank=True)
 
+    def __str__(self):
+        return f"{self.title}"
+
 class SpecificationValue(models.Model):
     sid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
     specification = models.ForeignKey(Specification, on_delete=models.CASCADE, related_name="values", null=True, blank=True)
     title = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.title}"
     
     
 class Mapping(models.Model):
@@ -879,4 +903,4 @@ class RecentlyViewed(models.Model):
 class Social(models.Model):
     link = models.URLField(max_length=200)
     text = models.CharField(max_length=50)
-    image = models.ImageField(upload_to="social")
+    image = models.ImageField(upload_to=preserve_filename)
