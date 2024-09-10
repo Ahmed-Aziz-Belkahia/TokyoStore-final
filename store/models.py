@@ -167,6 +167,12 @@ DELIVERY_STATUS = (
     ("returned", 'Returned'),
 )
 
+HIGHLIGHT = (
+    (0, "Value Of The Day"),
+    (1, "TOP 100"),
+    (2, "New Arrivals"),
+)
+
 PAYMENT_METHOD = (
     ("Paypal", "Paypal"),
     ("Credit/Debit Card", "Credit/Debit Card"),
@@ -371,12 +377,30 @@ class Brand(models.Model):
             
         super(Brand, self).save(*args, **kwargs) 
 
+class generalType(models.Model):
+    title = models.CharField(max_length=50)
+    meta_title = models.SlugField()
+
+    def save(self, *args, **kwargs):
+
+        if self.meta_title == "" or self.meta_title == None:
+            uuid_key = shortuuid.uuid()
+            uniqueid = uuid_key[:4]
+            self.meta_title = slugify(self.title) + "-" + str(uniqueid.lower())
+            
+        super(generalType, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
 class Type(models.Model):
     tid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
     product = models.ForeignKey("Product", on_delete=models.SET_NULL, blank=True, null=True, related_name="product_types")
     title = models.CharField(max_length=150, null=True)
     meta_title = models.SlugField(unique=True, null=True, blank=True)
-    date = models.DateTimeField(auto_now_add=True, null=True, blank=True) 
+    add_to_filter = models.BooleanField(default=False)
+    general_type = models.ForeignKey(generalType, on_delete=models.CASCADE, blank=True, null=True, related_name="types")
+    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     """ class Meta:
         ordering = ['-date']
@@ -415,6 +439,8 @@ class Product(models.Model):
     meta_title = models.SlugField(unique=True, blank=True, null=True)
     title_meta_title = models.CharField(max_length=1000, null=True, blank=True)
     
+    optional_free_products = models.ManyToManyField("store.Product", blank=True, null=True)
+
     index = models.IntegerField(default=10, blank=True, null=True)
 
     image = models.ImageField(upload_to=preserve_filename, default="product.png")
@@ -462,6 +488,8 @@ class Product(models.Model):
     deal_of_the_week = models.BooleanField(default=False)
     deal_of_the_week_end_date = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
     #formatted_end_date = models.CharField(max_length=50, blank=True, null=True)
+
+    highlight_type = models.IntegerField(choices=HIGHLIGHT, null=True, blank=True)
 
     game = models.BooleanField(default=False, null=True, blank=True)
     featured_game = models.BooleanField(default=False, null=True, blank=True)
@@ -623,9 +651,25 @@ class Gallery(models.Model):
     def __str__(self):
         return f"{self.product.id} - {self.alt} - {self.id}"
 
+class generalChoice(models.Model):
+    general_type = models.ForeignKey(generalType, on_delete=models.CASCADE, related_name='general_choices')
+    title = models.CharField(max_length=150, blank=True, null=True)
+    meta_title = models.SlugField(unique=True, null=True, blank=True)
+
+    def product_count(self):
+        # Get the types linked to this generalChoice through its choices
+        type_ids = self.choices.values_list('type_id', flat=True).distinct()
+
+        # Count the number of products linked to these types with exactly the choices
+        return Product.objects.filter(product_types__id__in=type_ids).distinct().count()
+
+    def __str__(self):
+        return self.title
+
 class Choice(models.Model):
     type = models.ForeignKey(Type, on_delete=models.CASCADE, related_name='choices')
     title = models.CharField(max_length=150, blank=True, null=True)
+    general_choice = models.ForeignKey(generalChoice, blank=True, null=True, on_delete=models.CASCADE, related_name="choices")
     meta_title = models.SlugField(unique=True, null=True, blank=True)
     image = models.ForeignKey(Gallery, on_delete=models.CASCADE, blank=True, null=True)
     alt = models.CharField(max_length=100, blank=True, null=True)
@@ -638,6 +682,9 @@ class Choice(models.Model):
             self.meta_title = slugify(self.title) + "-" + str(uniqueid.lower())
             
         super(Choice, self).save(*args, **kwargs) 
+
+    def __str__(self):
+        return self.title
 
 class ProductBidders(models.Model):
     bid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")

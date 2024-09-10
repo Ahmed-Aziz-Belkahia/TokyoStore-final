@@ -88,7 +88,7 @@
                                 <div class="border-bottom border-color-1 mb-5">
                                     <h3 class="section-title section-title__sm mb-0 pb-2 font-size-18">Filters</h3>
                                 </div>
-                                
+                                {% comment %} BRAND FILTER {% endcomment %}
                                 <div class="border-bottom pb-4 mb-4">
                                     <h4 class="font-size-14 mb-3 font-weight-bold">Brand</h4>
                             
@@ -132,7 +132,8 @@
                                         <!-- End Link -->
                                     {% endif %}
                                 </div>
-                            
+                                
+                                {% comment %} CATEGORY FILTER {% endcomment %}
                                 <div class="border-bottom pb-4 mb-4">
                                     <h4 class="font-size-14 mb-3 font-weight-bold">Category</h4>
                             
@@ -171,7 +172,49 @@
                                         <!-- End Link -->
                                     {% endif %}
                                 </div>
+
+                                {% for general_type in all_general_types %}
+                                <div class="border-bottom pb-4 mb-4">
+                                    <h4 class="font-size-14 mb-3 font-weight-bold">{{general_type.title}}</h4>
                             
+                                    <!-- Checkboxes -->
+                                    {% for general_choice in general_type.general_choices.all %}
+                                        <div class="form-group d-flex align-items-center justify-content-between mb-2 pb-1">
+                                            <div class="custom-control custom-checkbox">
+                                                <input name="{{ general_type.meta_title }}" value="{{ general_choice.meta_title }}" {% if general_choice.meta_title in selected_general_choices %} checked {% endif %} type="checkbox" class="custom-control-input" id="general_choice{{general_choice.id}}">
+                                                <label class="custom-control-label" for="general_choice{{general_choice.id}}">{{general_choice.title}} <span class="text-gray-25 font-size-12 font-weight-normal"> ({{general_choice.product_count}})</span></label>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    <!-- End Checkboxes -->
+                                    {% comment %} {% if general_type.types.all|past_mini_get %}
+                                        <!-- View More - Collapse -->
+                                        <div class="collapse" id="collapseCategory">
+                                            {% for category in categories|past_mini_get %}
+                                                <div class="form-group d-flex align-items-center justify-content-between mb-2 pb-1">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input name="categories" value="{{ category.meta_title }}" {% if category.meta_title in selected_categories %} checked {% endif %} type="checkbox" class="custom-control-input" id="category{{category.id}}">
+                                                        <label class="custom-control-label" for="category{{category.id}}">{{category.title}} <span class="text-gray-25 font-size-12 font-weight-normal"> ({{category.product_count}})</span></label>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        <!-- End View More - Collapse -->
+                            
+                                        <!-- Link -->
+                                        <a class="link link-collapse small font-size-13 text-gray-27 d-inline-flex mt-2" data-toggle="collapse" href="#collapseCategory" role="button" aria-expanded="false" aria-controls="collapseCategory">
+                                            <span class="link__icon text-gray-27 bg-white">
+                                                <span class="link__icon-inner">+</span>
+                                            </span>
+                                            <span class="link-collapse__default">Show more</span>
+                                            <span class="link-collapse__active">Show less</span>
+                                        </a>
+                                        <!-- End Link -->
+                                    {% endif %} {% endcomment %}
+                                </div>
+                                {% endfor %}
+
+                                {% comment %} RATING FILTER {% endcomment %}
                                 <div class="border-bottom pb-4 mb-4">
                                     <h4 class="font-size-14 mb-3 font-weight-bold">Rating</h4>
                                     <!-- Checkboxes -->
@@ -185,7 +228,7 @@
                                     {% endfor %}
                                     <!-- End Checkboxes -->
                                 </div>
-                            
+                                {% comment %} PRICE FILTER {% endcomment %}
                                 <div class="range-slider">
                                     <h4 class="font-size-14 mb-3 font-weight-bold">Price</h4>
                                     <!-- Range Slider -->

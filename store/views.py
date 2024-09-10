@@ -22,7 +22,7 @@ from django.core.mail import send_mail
 
 
 from store.forms import CheckoutForm, ReviewForm
-from store.models import RATING, CallToActionBanner, Genre, Mapping, Product, Category, CartOrder, CartOrderItem, Brand, Gallery, RecentlyViewed, Review, ProductFaq, ProductBidders, ProductOffers, SubCategory, Type
+from store.models import RATING, CallToActionBanner, Choice, Genre, Mapping, Product, Category, CartOrder, CartOrderItem, Brand, Gallery, RecentlyViewed, Review, ProductFaq, ProductBidders, ProductOffers, SubCategory, Type, generalType
 from core.models import Address
 from blog.models import Post
 from vendor.forms import CouponApplyForm
@@ -320,9 +320,10 @@ def shop(request):
     categories = Category.objects.filter(products__in=products).distinct()
     brands = Brand.objects.filter(product_brand__in=products).distinct()
     direct_subcategories = SubCategory.objects.none()
+    used_parameters = set()
 
     q = request.GET.get('q')
-    
+    used_parameters.add('q')
     if q:
         q = get_mapped_query(q.lower())
     
@@ -341,6 +342,8 @@ def shop(request):
     # Filter products by price range
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
+    used_parameters.add('min_price')
+    used_parameters.add('max_price')
     if not min_price:
         min_price = filtered_products.aggregate(min_price=Min('price'))['min_price']
 
@@ -352,17 +355,20 @@ def shop(request):
     
     # Filter products by selected categories
     selected_categories = request.GET.getlist('categories')
+    used_parameters.add('categories')
     print("gggg", selected_categories)
     if selected_categories:
         filtered_products = filtered_products.filter(category__meta_title__in=selected_categories)
 
     # Filter products by selected subcategories
     selected_subcategories = request.GET.getlist('subcategories')
+    used_parameters.add('subcategories')
     if selected_subcategories:
         filtered_products = filtered_products.filter(category__subcategories__meta_title__in=selected_subcategories)
 
     # Filter products by selected brands
     selected_brands = request.GET.getlist('brands')
+    used_parameters.add('brands')
     if selected_brands:
         filtered_products = filtered_products.filter(brand__meta_title__in=selected_brands)
 
@@ -377,10 +383,25 @@ def shop(request):
     
     # Filter products by selected ratings
     selected_ratings = [int(rating.strip()) for rating in request.GET.getlist('ratings')]
+    used_parameters.add('ratings')
     if selected_ratings:
         filtered_products = filtered_products.filter(reviews__rating__in=selected_ratings).distinct()
 
+    all_general_types = generalType.objects.filter(
+        id__in=Type.objects.filter(
+            product__in=products,
+            general_type__isnull=False
+        ).values_list('general_type', flat=True)
+    ).distinct()
+
+    static_search = request.GET.get('static_search')
+    used_parameters.add('static_search')
+    if static_search:
+        filtered_products = filtered_products.filter(highlight_type=static_search)
+
+
     sort_by = request.GET.get('sort_by')
+    used_parameters.add('sort_by')
     if sort_by:
         if sort_by == 'price-low-to-high':
             filtered_products = filtered_products.order_by("index", 'price')
@@ -391,10 +412,40 @@ def shop(request):
     lowest_price_product = filtered_products_initial.order_by('price').first().price
     highest_price_product = filtered_products_initial.order_by('-price').first().price
 
+    used_parameters.add('page')
+    unused_parameters = set(request.GET.keys()) - used_parameters
+    print(f"Unused query parameters: {unused_parameters}")
+
+    selected_general_choices = []
+
+    for parameter in unused_parameters:
+
+
+        selected_type_choices = request.GET.getlist(parameter)
+        
+        if selected_type_choices:
+            # Get the general type for parameter
+            general_type = generalType.objects.get(meta_title=parameter)
+
+            # Get all choices for the selected parameter
+            selected_choices = Choice.objects.filter(
+                type__general_type=general_type, 
+                general_choice__meta_title__in=selected_type_choices
+            )
+            for choice in selected_choices:
+                selected_general_choices.append(choice.general_choice.meta_title)
+            # Filter products that have these selected choices
+            filtered_products = filtered_products.filter(
+                product_types__choices__in=selected_choices
+            ).distinct()
+
+
     # Paginate the filtered products
     paginator = Paginator(filtered_products, 20)
     page_number = request.GET.get('page')
     pages_filtered_products = paginator.get_page(page_number)
+
+
 
 
 
@@ -428,6 +479,8 @@ def shop(request):
         'start_index': start_index,
         'end_index': end_index,
         'total_products': total_products,
+        'all_general_types': all_general_types,
+        'selected_general_choices': selected_general_choices,
     }
     return render(request, "Template/html/shop/shop-4-columns-sidebar.html", context)
 

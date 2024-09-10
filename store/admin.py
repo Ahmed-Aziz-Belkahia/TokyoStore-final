@@ -1,7 +1,8 @@
 from django.contrib import admin
+from django import forms
 from store.models import (CallToActionBanner, CartOrderItem, Choice, Genre, Product, Category, CartOrder, Gallery,
                          Brand, ProductFaq, Review, ProductBidders, ProductOffers, SubCategory, Type, Specification,
-                         SpecificationValue, Mapping, Social)
+                         SpecificationValue, Mapping, Social, generalChoice, generalType)
 from import_export.admin import ImportExportModelAdmin
 from django.contrib.auth.admin import UserAdmin
 from django.db import models
@@ -42,8 +43,52 @@ class StaffUserChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.username
 
+class ChoiceInlineForm(forms.ModelForm):
+    class Meta:
+        model = Choice
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        # Extract the instance from kwargs
+        type_instance = kwargs.pop('type_instance', None)
+        super().__init__(*args, **kwargs)
+
+        if type_instance:
+            # Filter general_choice dropdown based on the general_type of the Type instance
+            self.fields['general_choice'].queryset = generalChoice.objects.filter(
+                general_type=type_instance.general_type
+            )
+
 class TypesChoicesAdmin(admin.TabularInline):
     model = Choice
+    form = ChoiceInlineForm
+    prepopulated_fields = {"meta_title": ("title", )}
+    extra = 0
+
+    def get_formset(self, request, obj=None, **kwargs):
+        # Get the formset
+        formset = super().get_formset(request, obj, **kwargs)
+        # Override the formset’s form class to include the current Type instance
+        class FormsetWithTypeInstance(formset):
+            def __init__(self, *args, **kwargs):
+                # Pass the current Type instance to the form
+                if obj:
+                    kwargs['form_kwargs'] = {'type_instance': obj}
+                super().__init__(*args, **kwargs)
+        return FormsetWithTypeInstance
+
+    def get_form(self, request, obj=None, **kwargs):
+        # Add the type instance to the form kwargs
+        form = super().get_form(request, obj, **kwargs)
+        if obj:
+            # Inject type_instance into form kwargs
+            form.base_fields['general_choice'].queryset = generalChoice.objects.filter(
+                general_type=obj.general_type
+            )
+        return form
+
+class generalTypesGeneralChoicesAdmin(admin.TabularInline):
+    model = generalChoice
     prepopulated_fields = {"meta_title": ("title", )}
     extra= 0
 
@@ -56,6 +101,11 @@ class InlineType(admin.TabularInline):
 class TypeAdmin(ImportExportModelAdmin):
     inlines = [TypesChoicesAdmin]
     """ list_display = ['__str__'] """
+    prepopulated_fields = {"meta_title": ("title", )}
+    extra= 0
+
+class generalTypeAdmin(ImportExportModelAdmin):
+    inlines = [generalTypesGeneralChoicesAdmin]
     prepopulated_fields = {"meta_title": ("title", )}
     extra= 0
 
@@ -161,6 +211,7 @@ admin.site.register(ProductOffers, ProductOfferAdmin)
 admin.site.register(CallToActionBanner, CallToActionBannerAdmin)
 admin.site.register(Genre, GenreAdmin)
 admin.site.register(Type, TypeAdmin)
+admin.site.register(generalType, generalTypeAdmin)
 admin.site.register(Specification, SpecificationAdmin)  # Added
 admin.site.register(SpecificationValue, SpecificationValueAdmin)  # Added
 admin.site.register(Mapping)  # Added
