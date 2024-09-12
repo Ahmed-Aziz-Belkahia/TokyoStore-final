@@ -468,8 +468,8 @@ class Product(models.Model):
 
     gz_coins = models.IntegerField(default=0, null=True, blank=True)
 
-    colors = models.CharField(max_length=200, help_text="Comma-separated list of available colors", null=True)
-    sizes = models.CharField(max_length=200, help_text="Comma-separated list of available sizes", blank=True)
+    colors = models.CharField(max_length=200, help_text="Comma-separated list of available colors", null=True, blank=True)
+    sizes = models.CharField(max_length=200, help_text="Comma-separated list of available sizes", null=True, blank=True)
 
     show_old_price = models.BooleanField(default=True)
     tags = models.CharField(blank=True, null=True, max_length=10000)
@@ -491,7 +491,17 @@ class Product(models.Model):
 
     highlight_type = models.IntegerField(choices=HIGHLIGHT, null=True, blank=True)
 
+
+
+
+
+
+
+
+
+
     game = models.BooleanField(default=False, null=True, blank=True)
+
     featured_game = models.BooleanField(default=False, null=True, blank=True)
     featured_game_banner = models.ImageField(upload_to=preserve_filename, default="featured game banner.png", null=True, blank=True)
     featured_game_banner_alt = models.CharField(max_length=100, blank=True, null=True)
@@ -500,18 +510,21 @@ class Product(models.Model):
     featured_game_slider_banner = models.ImageField(upload_to=preserve_filename, default="featured .png", null=True, blank=True)
     featured_game_slider_mobile_banner = models.ImageField(upload_to=preserve_filename, default="featured game slider mobile banner.png", null=True, blank=True)
     featured_game_slider_alt = models.CharField(max_length=100, blank=True, null=True)
-
-    hero_section_featured = models.BooleanField(default=False, null=True, blank=True)
     hero_banner = models.ImageField(upload_to=preserve_filename, default="hero.png", null=True, blank=True)
     hero_banner_mobile = models.ImageField(upload_to=preserve_filename, default="hero_mobile.png", null=True, blank=True)
+    deal_category = models.CharField(choices=DEAL_CATEGORIES, max_length=40, blank=True, null=True)
+    deal_alt = models.CharField(max_length=100, blank=True, null=True)
+    deal_description = models.CharField(max_length=150, blank=True, null=True)
+
+
+
+    hero_section_featured = models.BooleanField(default=False, null=True, blank=True)
     hero_mini_image = models.ImageField(upload_to=preserve_filename, default="hero_mobile.png", null=True, blank=True)
     hero_alt = models.CharField(max_length=100, blank=True, null=True)
     hero_mini_text = models.CharField(max_length=50, blank=True, null=True)
     hero_text = models.CharField(max_length=50, blank=True, null=True)
 
-    deal_category = models.CharField(choices=DEAL_CATEGORIES, max_length=40, blank=True, null=True)
-    deal_alt = models.CharField(max_length=100, blank=True, null=True)
-    deal_description = models.CharField(max_length=150, blank=True, null=True)
+
 
     catalog_type = models.CharField(choices=CATALOG_TYPES, max_length=40, blank=True, null=True)
 
