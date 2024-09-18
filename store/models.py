@@ -468,8 +468,8 @@ class Product(models.Model):
 
     gz_coins = models.IntegerField(default=0, null=True, blank=True)
 
-    colors = models.CharField(max_length=200, help_text="Comma-separated list of available colors", null=True, blank=True)
-    sizes = models.CharField(max_length=200, help_text="Comma-separated list of available sizes", null=True, blank=True)
+    colors = models.CharField(max_length=200, help_text="Comma-separated list of available colors", null=True)
+    sizes = models.CharField(max_length=200, help_text="Comma-separated list of available sizes", blank=True)
 
     show_old_price = models.BooleanField(default=True)
     tags = models.CharField(blank=True, null=True, max_length=10000)

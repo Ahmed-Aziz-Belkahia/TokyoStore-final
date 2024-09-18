@@ -27,7 +27,8 @@
         <link rel="stylesheet" href="{% static "assets/vendor/fancybox/jquery.fancybox.css" %}">
         <link rel="stylesheet" href="{% static "assets/vendor/slick-carousel/slick/slick.css" %}">
         <link rel="stylesheet" href="{% static "assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" %}">
-
+        <link rel="stylesheet" href="{% static "assets/vendor/font-awesome/css/fontawesome-all.min.css" %}">
+        <script src="https://kit.fontawesome.com/f45f6ff45f.js" crossorigin="anonymous"></script>
         <!-- CSS Electro Template -->
         <link rel="stylesheet" href="{% static "assets/css/theme.css" %}">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -152,7 +153,6 @@
                                     </div>
                                 </div>
                                 <p>condition: <span>{{product.product_condition}}</span></p>
-                                {% if product.staff_ref %}<p>ref: {{product.staff_ref}}</p>{% endif %}
                                 <div class="flex-horizontal-center flex-wrap mb-4">
                                     <a href="{% url "core:buyer-wishlist" %}" class="text-gray-6 font-size-13 mr-2"><i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
                                     {% comment %} <a href="#" class="text-gray-6 font-size-13 ml-2"><i class="ec ec-compare mr-1 font-size-15"></i> Compare</a> {% endcomment %}
@@ -166,7 +166,8 @@
                                         <li>20 MP Electro and 28 megapixel CMOS rear camera</li> {% endcomment %}
                                     </ul>
                                 </div>
-                                <p><strong>SKU</strong>: {{product.sku}}</p>
+                                <p style="margin-bottom: 0;"><strong>SKU</strong>: {{product.sku}}</p>
+                                {% if product.staff_ref %}<p class="staff_reff" style="font-size: 10px;">ref: {{product.staff_ref}}</p>{% endif %}
                                 <div class="mb-4">
                                     <div class="d-flex align-items-baseline">
                                         <ins class="font-size-36 text-decoration-none">TND {{product.price}}</ins>
@@ -175,36 +176,7 @@
                                         {% endif %}
                                     </div>
                                 </div>
-                                {% if product.colors %}
-                                <div class="border-top border-bottom py-3 mb-4">
-                                    <div class="d-flex align-items-center">
-                                        <h6 class="font-size-14 mb-0">Color</h6>
-                                        <!-- Select -->
-                                        <select class="product-color-{{ product.id }} js-select selectpicker dropdown-select ml-3"
-                                            data-style="btn-sm bg-white font-weight-normal py-2 border">
-                                            {% for color in product.get_colors_list %}
-                                                <option value="{{ color }}">{{ color }}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <!-- End Select -->
-                                    </div>
-                                </div>
-                                {% endif %}
-                                {% if product.sizes %}
-                                <div class="border-top border-bottom py-3 mb-4">
-                                    <div class="d-flex align-items-center">
-                                        <h6 class="font-size-14 mb-0">Sizes</h6>
-                                        <!-- Select -->
-                                        <select class="product-size-{{ product.id }} js-select selectpicker dropdown-select ml-3"
-                                            data-style="btn-sm bg-white font-weight-normal py-2 border">
-                                            {% for size in product.get_sizes_list %}
-                                                <option value="{{ size }}">{{ size }}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <!-- End Select -->
-                                    </div>
-                                </div>
-                                {% endif %}
+                                
 
 
                                 {% for type in product.product_types.all %}
@@ -222,8 +194,44 @@
                                         </div>
                                     </div>
                                 {% endfor %}
-                            
-                                
+                                <style>
+                                    .gift {
+                                        width: 170px;
+                                        height: 200px;
+                                        border-radius: 15px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: space-between;
+                                        flex-flow: column;
+                                        padding: .5rem;
+                                        outline: 1px solid black;
+                                        cursor: pointer;
+                                    }
+                                    .gift.active {
+                                        outline: 2px solid black;
+                                    }
+
+                                    .gift img {
+                                        margin-top: 10px;
+                                        border-radius: 15px;
+                                        width: 146px;
+                                        height: 146px;   
+                                    }
+                                </style>
+                                <div class="border-top py-3 mb-4">
+                                    <div class="d-flex align-items-center" style="display: flex !important;justify-content: center;flex-flow: column;align-items: flex-start !important;">
+                                        <h6 class="font-size-14 mb-0" style="font-size: 16px; font-weight: 700">Choose a free gift</h6>
+                                        <div class="free_gift_cont" style="display: flex;gap: 1rem;margin-top: 10px">
+                                            {% for p in product.optional_free_products.all %}
+                                                <div class="gift" data-id={{p.id}} data-meta-title="{{p.meta_title}}" data-title="{{p.title}}">
+                                                    <img src="{{p.image.url}}" alt="">
+                                                    <div class="title">{{p.title}}</div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+
 
                                 
                                 <div class="d-md-flex align-items-end mb-3">
@@ -318,7 +326,7 @@
                                         <a class="btn px-5 btn-primary-dark transition-3d-hover add-to-cart-btn" data-index="{{product.id}}"><i class="ec ec-add-to-cart mr-2 font-size-20"></i> Add to Cart</a>
                                     </div>
                                     <div class="ml-md-3">
-                                        <a href="store:cart-view" class="btn px-5 btn-primary-dark transition-3d-hover add-to-cart-btn buy-now" data-index="{{product.id}}"><i class="ec ec-add-to-cart mr-2 font-size-20"></i> buy now</a>
+                                        <a href="{% url "store:cart-view" %}" class="btn px-5 btn-primary-dark transition-3d-hover add-to-cart-btn buy-now" data-index="{{product.id}}"><i class="ec ec-add-to-cart mr-2 font-size-20"></i> buy now</a>
                                     </div>
                                     <script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
                                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -326,9 +334,42 @@
                                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                                     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
                                     <script>
+                                        let selectedGift = null;  // To store the currently selected gift
+                                    
+                                        const gifts = document.querySelectorAll('.gift');
+                                
+                                        // Handle selecting the gift
+                                        gifts.forEach(gift => {
+                                            gift.addEventListener('click', function() {
+                                                // Remove 'active' class from all gifts
+                                                gifts.forEach(g => g.classList.remove('active'));
+                                                
+                                                // Add 'active' class to the clicked gift and set it as the selected gift
+                                                gift.classList.add('active');
+                                                selectedGift = gift;
+                                            });
+                                        });
+                                    </script>
+                                    <script>
                                         $(".add-to-cart-btn").on("click", function(){
-                                            
                                             var selectedChoices = {};
+                                            if (selectedGift) {
+                                                const id = selectedGift.getAttribute('data-id');
+                                                const metaTitle = selectedGift.getAttribute('data-meta-title');
+                                                const title = selectedGift.getAttribute('data-title');
+                                
+                                                // Log the selected gift's data
+                                                console.log(`Selected Gift ID: ${id}`);
+                                                console.log(`Meta Title: ${metaTitle}`);
+                                                console.log(`Title: ${title}`);
+
+                                                selectedChoices["free_option"] = title;
+                                            } else {
+                                                console.log("No gift selected.");
+                                            }
+                                            
+
+                                            
                                             {% for type in product.product_types.all %}
                                                 // Get the parent div using the class
                                                 const parentDiv = document.querySelector('.product-type-{{ type.id }}');
@@ -458,6 +499,7 @@
                                     
                                         })
                                     </script>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -610,15 +652,15 @@
                                             </tbody>
                                         </table>
                                     </div> {% endcomment %}
-                                    <h3 class="font-size-18 mb-4">Specifications</h3>
                                     {% for spec in product.specifications.all %}
+                                        <h3 class="font-size-18 mb-4">{{spec.title}}</h3>
                                         <div class="table-responsive">
                                             
                                             <table class="table table-hover">
                                                 <tbody>
                                                     {% for value in spec.values.all %}
                                                         <tr>
-                                                            <th class="px-4 px-xl-5 border-top-0">{{value.title}}</th>
+                                                            <th style="width: 50%;" class="px-4 px-xl-5 border-top-0">{{value.title}}</th>
                                                             <td class="border-top-0">{{value.description}}</td>
                                                         </tr>
                                                     {% endfor %}

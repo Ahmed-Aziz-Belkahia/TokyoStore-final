@@ -60,7 +60,7 @@
     
                     {% if product.type == "regular" %}
                         <div class="shop_item_cart_bftn d-grid mt-2">
-                            <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}>add to cart</a>
+                            <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}><i class="fa-solid fa-cart-shopping"></i></a>
                         </div>
                     {% endif %}  
                     {% if product.type == "pre_order" %}
@@ -70,7 +70,7 @@
                     {% endif %}  
                 {% else %}
                     <div class="shop_item_cart_bftn d-grid mt-2">
-                        <a class="btn purple-btn add-to-cart-btn">add to cart</a>
+                        <a class="btn purple-btn add-to-cart-btn"><i class="fa-solid fa-cart-shopping"></i></a>
                     </div>
                 {% endif %} 
                 </div>

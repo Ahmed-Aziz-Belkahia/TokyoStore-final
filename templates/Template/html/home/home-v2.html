@@ -18,6 +18,7 @@
 
         <!-- CSS Implementing Plugins -->
         <link rel="stylesheet" href="{% static "assets/vendor/font-awesome/css/fontawesome-all.min.css" %}">
+        <script src="https://kit.fontawesome.com/f45f6ff45f.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="{% static "assets/css/font-electro.css" %}">
 
         <link rel="stylesheet" href="{% static "assets/vendor/animate.css/animate.min.css" %}">
@@ -26,9 +27,27 @@
         <link rel="stylesheet" href="{% static "assets/vendor/fancybox/jquery.fancybox.css" %}">
         <link rel="stylesheet" href="{% static "assets/vendor/slick-carousel/slick/slick.css" %}">
         <link rel="stylesheet" href="{% static "assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" %}">
-        <script src="https://kit.fontawesome.com/f45f6ff45f.js" crossorigin="anonymous"></script>
         <!-- CSS Electro Template -->
         <link rel="stylesheet" href="{% static "assets/css/theme.css" %}">
+        <style>
+            .add-to-cart-btn .fa-solid, .add-to-cart-btn .fas {
+                font-weight: 900;
+                width: 34px;
+                height: 34px;
+                background-color: #7A0000;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: black;
+                cursor: pointer;
+            }
+
+            .c_pr {
+                font-size: 13px;
+                width: 39px;
+            }
+        </style>
     </head>
 
     <body>
@@ -601,7 +620,7 @@
                                             <a href="{% url "store:cart-view" %}" class="text-gray-90 position-relative d-flex " data-toggle="tooltip" data-placement="top" title="Cart">
                                                 <i class="font-size-22 ec ec-shopping-bag"></i>
                                                 <span class="width-22 height-22 bg-dark position-absolute flex-content-center text-white rounded-circle left-12 top-8 font-weight-bold font-size-12">{{request.session.cart_data_obj|length}}</span>
-                                                <span class="font-weight-bold font-size-16 text-gray-90 ml-3">TND {{request.session.cart_data_obj.cart_total_amount|default:0}}</span>
+                                                <span class="font-weight-bold font-size-16 text-gray-90 ml-3 c_pr">TND {{request.session.cart_data_obj.cart_total_amount|default:0}}</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -648,7 +667,7 @@
             }
 
          </style>
-        <div class="sm">
+        <div class="sm" style="position: sticky">
             {% for social in socials %}
                 <a href="{{social.link}}" class="sm-l">
                     <div class="text">{{social.text}}</div>
@@ -1085,7 +1104,7 @@
                                                 
                                                                 {% if product.type == "regular" %}
                                                                     <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}>add to cart</a>
+                                                                        <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}><i class="fa-solid fa-cart-shopping"></i></a>
                                                                     </div>
                                                                 {% endif %}  
                                                                 {% if product.type == "pre_order" %}
@@ -1095,7 +1114,7 @@
                                                                 {% endif %}  
                                                             {% else %}
                                                                 <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                    <a class="btn purple-btn add-to-cart-btn">add to cart</a>
+                                                                    <a class="btn purple-btn add-to-cart-btn"><i class="fa-solid fa-cart-shopping"></i></a>
                                                                 </div>
                                                             {% endif %} 
                                                             </div>
@@ -1177,7 +1196,7 @@
                                                 
                                                                 {% if product.type == "regular" %}
                                                                     <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}>add to cart</a>
+                                                                        <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}><i class="fa-solid fa-cart-shopping"></i></a>
                                                                     </div>
                                                                 {% endif %}  
                                                                 {% if product.type == "pre_order" %}
@@ -1187,7 +1206,7 @@
                                                                 {% endif %}  
                                                             {% else %}
                                                                 <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                    <a class="btn purple-btn add-to-cart-btn">add to cart</a>
+                                                                    <a class="btn purple-btn add-to-cart-btn"><i class="fa-solid fa-cart-shopping"></i></a>
                                                                 </div>
                                                             {% endif %} 
                                                             </div>
@@ -1269,7 +1288,7 @@
                                                 
                                                                 {% if product.type == "regular" %}
                                                                     <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}>add to cart</a>
+                                                                        <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}><i class="fa-solid fa-cart-shopping"></i></a>
                                                                     </div>
                                                                 {% endif %}  
                                                                 {% if product.type == "pre_order" %}
@@ -1279,7 +1298,7 @@
                                                                 {% endif %}  
                                                             {% else %}
                                                                 <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                    <a class="btn purple-btn add-to-cart-btn">add to cart</a>
+                                                                    <a class="btn purple-btn add-to-cart-btn"><i class="fa-solid fa-cart-shopping"></i></a>
                                                                 </div>
                                                             {% endif %} 
                                                             </div>
@@ -1891,7 +1910,7 @@
                                                 
                                                                 {% if product.type == "regular" %}
                                                                     <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}>add to cart</a>
+                                                                        <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}><i class="fa-solid fa-cart-shopping"></i></a>
                                                                     </div>
                                                                 {% endif %}  
                                                                 {% if product.type == "pre_order" %}
@@ -1901,7 +1920,7 @@
                                                                 {% endif %}  
                                                             {% else %}
                                                                 <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                    <a class="btn purple-btn add-to-cart-btn">add to cart</a>
+                                                                    <a class="btn purple-btn add-to-cart-btn"><i class="fa-solid fa-cart-shopping"></i></a>
                                                                 </div>
                                                             {% endif %} 
                                                             </div>
@@ -2013,7 +2032,7 @@
                                                 
                                                                 {% if product.type == "regular" %}
                                                                     <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                        <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}>add to cart</a>
+                                                                        <a class="btn purple-btn add-to-cart-btn" data-index={{product.id}}><i class="fa-solid fa-cart-shopping"></i></a>
                                                                     </div>
                                                                 {% endif %}  
                                                                 {% if product.type == "pre_order" %}
@@ -2023,7 +2042,7 @@
                                                                 {% endif %}  
                                                             {% else %}
                                                                 <div class="shop_item_cart_bftn d-grid mt-2">
-                                                                    <a class="btn purple-btn add-to-cart-btn">add to cart</a>
+                                                                    <a class="btn purple-btn add-to-cart-btn"><i class="fa-solid fa-cart-shopping"></i></a>
                                                                 </div>
                                                             {% endif %} 
                                                             </div>
@@ -2990,7 +3009,7 @@
                         },
                         success: function(response){
                             // this_val.html("✓")
-                            this_val.html("Added to cart <i class='fas fa-check-circle'></i>")
+                            this_val.html("<i class='fa-solid fa-check'></i>")
             
                             console.log("Added Product to Cart!");
                             $(".cart-items-count").text(response.totalcartitems + " Items")
